@@ -11,7 +11,6 @@ scikit-learn
 scikit-image
 imagehash
 tensorflow
-tensorflow-addons
 keras
 keras-tuner
 pillow
