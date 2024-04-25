@@ -26,6 +26,13 @@ def data_count_plot(
 
     Returns:
         None
+
+    Notes:
+        The ax parameter is optional
+        The function can be used as below
+            plt.figure(figsize(10, 10))
+            data_count_plot(df, 'Type', title='File Types')
+            plt.show()
     """
     if ax is None:
         ax = plt.gca()
