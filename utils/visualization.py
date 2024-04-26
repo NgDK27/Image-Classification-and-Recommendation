@@ -19,7 +19,7 @@ def data_count_plot(
     Parameters:
         df (pd.DataFrame): The DataFrame containing the data.
         col (str): The column name for which the count plot is to be created.
-        ax (matplotlib.axes.Axes, optional): The axes on which to draw the plot. If not provided, the current axes will be used.
+        ax (matplotlib.axes.Axes, optional): The axes on which to draw the plot. If not provided, the current axes will be used and displayed.
         horizontal (bool, optional): Whether to create a horizontal count plot. Default is False.
         title (str, optional): The title for the plot. Default is None.
         annotate (bool, optional): Whether to annotate the bars with counts. Default is True.
@@ -28,13 +28,6 @@ def data_count_plot(
 
     Returns:
         None
-
-    Notes:
-        The ax parameter is optional
-        The function can be used as below
-            plt.figure(figsize(10, 10))
-            data_count_plot(df, 'Type', title='File Types')
-            plt.show()
     """
 
     ax = ax or plt.gca()
