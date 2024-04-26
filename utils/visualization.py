@@ -11,6 +11,7 @@ def data_count_plot(
         title: str = None,
         annotate: bool = True,
         palette=None,
+        rotation: float = 0.0
 ) -> None:
     """
     Create a count plot for a specified column in a DataFrame.
@@ -23,6 +24,7 @@ def data_count_plot(
         title (str, optional): The title for the plot. Default is None.
         annotate (bool, optional): Whether to annotate the bars with counts. Default is True.
         palette (str or list of str, optional): The color palette to use for the plot. Default is None.
+        rotation (float, optional): The rotation degree for the labels. Does not work with horizontal = True. Default is 0.0
 
     Returns:
         None
@@ -34,29 +36,25 @@ def data_count_plot(
             data_count_plot(df, 'Type', title='File Types')
             plt.show()
     """
-    if ax is None:
-        ax = plt.gca()
 
+    ax = ax or plt.gca()
     if col not in df.columns:
         raise ValueError(f"Column '{col}' does not exist in the DataFrame.")
 
-    if horizontal:
-        sns.countplot(y=df[col], ax=ax, palette=palette, saturation=1)
-        ax.set_ylabel(col)
-    else:
-        sns.countplot(x=df[col], ax=ax, palette=palette, saturation=1)
-        ax.set_xlabel(col)
+    sns.countplot(data=df, x=col if not horizontal else None, y=None if not horizontal else col, ax=ax, palette=palette, saturation=1)
+    ax.set_xlabel(col) if not horizontal else ax.set_ylabel(col)
 
-    if title is not None:
+    if title:
         ax.set_title(title)
 
     if annotate:
-        # if horizontal:
-        #     for p in ax.patches:
-        #         ax.annotate(f'{p.get_width():.0f}', (p.get_width() / 2., p.get_y() + p.get_height() / 2.), ha='center',
-        #                     va='center', xytext=(0, 0), textcoords='offset points')
-        # else:
         ax.bar_label(ax.containers[0], fmt='%.0f')
 
-    if ax is None:
+    if not horizontal:
+        labels = ax.get_xticklabels()
+        ax.set_xticklabels(labels, rotation=rotation)
+
+    if ax == plt.gca():
+        plt.figure(figsize=(10, 10))
         plt.show()
+
