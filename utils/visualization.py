@@ -55,10 +55,10 @@ def data_count_plot(
         plt.show()
 
 
-def display_image(file_path):
+def display_image(file_path, base_path=''):
     # Prepend the directory path to the file name
-    directory = "../data/raw/Furniture_Data/"
-    full_path = os.path.join(directory, file_path)
+    base_directory = os.path.join(base_path, "data/raw/Furniture_Data/")
+    full_path = os.path.join(base_directory, file_path)
 
     # Check if the file exists
     if os.path.isfile(full_path):
