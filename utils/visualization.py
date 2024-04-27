@@ -78,3 +78,12 @@ def display_image(file_path):
             print(f"Error: Could not open or read the image file '{full_path}'")
     else:
         print(f"Error: The file '{full_path}' does not exist")
+
+
+def plot_histogram(df, column_name, bins=20, title=None):
+    plt.figure(figsize=(10, 5))
+    plt.hist(df[column_name], bins=bins, color='skyblue', edgecolor='black')
+    plt.title(title or f'Distribution of {column_name}')
+    plt.xlabel(column_name)
+    plt.ylabel('Frequency')
+    plt.show()
