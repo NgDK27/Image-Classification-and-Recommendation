@@ -53,3 +53,13 @@ def data_count_plot(
 
     if ax is None:
         plt.show()
+
+
+
+def plot_histogram(df, column_name, bins=20, title=None):
+    plt.figure(figsize=(10, 5))
+    plt.hist(df[column_name], bins=bins, color='skyblue', edgecolor='black')
+    plt.title(title or f'Distribution of {column_name}')
+    plt.xlabel(column_name)
+    plt.ylabel('Frequency')
+    plt.show()
