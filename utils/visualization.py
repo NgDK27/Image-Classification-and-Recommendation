@@ -1,6 +1,9 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from PIL import Image
+import os
+import matplotlib.image as mpimg
 
 
 def data_count_plot(
@@ -51,3 +54,27 @@ def data_count_plot(
         plt.figure(figsize=(10, 10))
         plt.show()
 
+
+def display_image(file_path):
+    # Prepend the directory path to the file name
+    directory = "../data/raw/Furniture_Data/"
+    full_path = os.path.join(directory, file_path)
+
+    # Check if the file exists
+    if os.path.isfile(full_path):
+        try:
+            # Open the image file
+            image = Image.open(full_path)
+
+            # Display the image
+            image.show()
+
+            # Display the image on notebook
+            image = mpimg.imread(full_path)
+            plt.imshow(image)
+            plt.show()
+
+        except IOError:
+            print(f"Error: Could not open or read the image file '{full_path}'")
+    else:
+        print(f"Error: The file '{full_path}' does not exist")
