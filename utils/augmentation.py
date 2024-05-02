@@ -11,12 +11,12 @@ def flip_image(image):
 
 def rotate_image(image):
     angle = random.randint(-180, 180)
-    return image.rotate(angle)
+    return image.rotate(angle, fillcolor='white')
 
 
 def shear_image(image):
     shear_factor = random.uniform(-0.5, 0.5)
-    return image.transform(image.size, Image.AFFINE, (1, shear_factor, 0, 0, 1, 0))
+    return image.transform(image.size, Image.AFFINE, (1, shear_factor, 0, 0, 1, 0), fillcolor='white')
 
 
 def crop_image(image):
@@ -84,82 +84,70 @@ def shift_image(image, move_range=50):
     return shifted_image
 
 
-def augment_image(
-        image_path,
-        flip=False,
-        rotate=False,
-        shear=False,
-        crop=False,
-        color_jitter=False,
-        shift=False):
+def stretch_image(image):
+    # Calculate the original dimensions
+    original_width, original_height = image.size
 
+    # Define default range for stretch factor (adjust as needed)
+    min_stretch = -0.3  # Minimum stretch factor (inward stretch)
+    max_stretch = 0.3   # Maximum stretch factor (outward stretch)
+
+    # Generate a random stretch factor within the specified range
+    stretch_factor = random.uniform(min_stretch, max_stretch)
+
+    # Calculate new dimensions based on the stretch factor
+    new_height = int(original_height * (1 + stretch_factor))
+
+    # Resize the image based on the calculated dimensions
+    resized_image = image.resize((original_width, new_height), resample=Image.BICUBIC)
+
+    # Create a new canvas of size 350x350
+    final_canvas_size = (350, 350)
+    final_image = Image.new('RGB', final_canvas_size, (255, 255, 255))  # White background
+
+    if new_height <= original_height:
+        # Apply padding to fit the output height to 350 (if result is smaller)
+        paste_position = ((final_canvas_size[0] - original_width) // 2, 0)
+        final_image.paste(resized_image, paste_position)
+    else:
+        # Apply padding to make the image square and then resize to 350x350 (if result is larger)
+        # Calculate width to make the image square (same as canvas width)
+        new_width = int(original_width * (final_canvas_size[1] / new_height))
+
+        # Resize the image to the calculated square dimensions
+        resized_image = resized_image.resize((new_width, final_canvas_size[1]), resample=Image.BICUBIC)
+
+        # Calculate paste position to center the resized image within the canvas
+        paste_position = ((final_canvas_size[0] - new_width) // 2, 0)
+        final_image.paste(resized_image, paste_position)
+
+    return final_image
+
+
+def augment_image(image_bytes, **kwargs):
     # Open the input image
-    image = Image.open(image_path)
+    image = Image.open(image_bytes)
 
-    # Augmentation techniques
-    augmentation_techniques = []
-    if flip:
-        augmentation_techniques.append(flip_image)
-    if shift:
-        augmentation_techniques.append(shift_image)
-    if rotate:
-        augmentation_techniques.append(rotate_image)
-    if crop:
-        augmentation_techniques.append(crop_image)
-    if shear:
-        augmentation_techniques.append(shear_image)
+    # Define augmentation functions with corresponding parameters
+    augmentation_functions = [
+        (flip_image, 'flip'),
+        (stretch_image, 'stretch'),
+        (shift_image, 'shift'),
+        # (rotate_image, 'rotate'),
+        (shear_image, 'shear'),
+        # (crop_image, 'crop'),
+        (color_jitter_image, 'color_jitter'),
+    ]
 
-    # Apply the selected augmentation techniques
-    augmented_image = image
-    for func in augmentation_techniques:
-        augmented_image = func(augmented_image)
+    # Filter out functions based on specified kwargs
+    enabled_functions = [(func, param) for func, param in augmentation_functions if kwargs.get(param, True)]
 
-    # Convert the sheared image to a NumPy array
-    image_array = np.array(augmented_image)
+    # Randomly decide whether to apply each enabled function
+    for func, param in enabled_functions:
+        if random.random() < 0.5:  # Adjust probability threshold as needed (e.g., 0.5 for 50% chance)
+            image = func(image)
 
-    # Identify black pixels (where RGB values sum up to zero)
-    black_pixels = np.sum(image_array, axis=2) == 0
-
-    # Replace black pixels with white (255)
-    image_array[black_pixels] = 255
-
-    # Convert the modified array back to an image
-    augmented_image = Image.fromarray(image_array)
-
-    if color_jitter:
-        augmented_image = color_jitter_image(augmented_image)
-
-    return augmented_image
+    return image
 
 
-def generate_augmented_images(
-        image_path,
-        num_images,
-        flip=False,
-        rotate=False,
-        shear=False,
-        crop=False,
-        color_jitter=False,
-        shift=False):
-
-    # Get the directory and filename
-    directory, filename = os.path.split(image_path)
-    filename_without_ext, ext = os.path.splitext(filename)
-
-    # Create a list of available numbers for filenames
-    available_numbers = list(range(1, num_images + 1))
-    random.shuffle(available_numbers)
-
-    # Generate and save the augmented images
-    for i in range(num_images):
-        # Generate a unique filename
-        new_filename = f"{filename_without_ext}_{available_numbers.pop()}{ext}"
-        new_image_path = os.path.join(directory, new_filename)
-
-        # Generate an augmented image
-        augmented_image = augment_image(image_path, flip=flip, rotate=rotate, shear=shear, crop=crop, color_jitter=color_jitter, shift=shift)
-
-        # Save the augmented image
-        augmented_image.save(new_image_path)
-        print(f"Saved augmented image: {new_image_path}")
 
