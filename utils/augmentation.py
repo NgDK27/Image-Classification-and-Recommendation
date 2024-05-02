@@ -1,5 +1,3 @@
-import os
-
 from PIL import Image, ImageOps, ImageEnhance
 import numpy as np
 import random
@@ -124,10 +122,7 @@ def stretch_image(image):
     return final_image
 
 
-def augment_image(image_bytes, **kwargs):
-    # Open the input image
-    image = Image.open(image_bytes)
-
+def augment_image(image, **kwargs):
     # Define augmentation functions with corresponding parameters
     augmentation_functions = [
         (flip_image, 'flip'),

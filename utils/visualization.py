@@ -37,18 +37,21 @@ def data_count_plot(
     if col not in df.columns:
         raise ValueError(f"Column '{col}' does not exist in the DataFrame.")
 
-    sns.countplot(data=df, x=col if not horizontal else None, y=None if not horizontal else col, ax=ax, palette=palette, saturation=1)
-    ax.set_xlabel(col) if not horizontal else ax.set_ylabel(col)
+    if not horizontal:
+        sns.countplot(data=df, x=col, ax=ax, palette=palette, saturation=1)
+        ax.set_xlabel(col)
+        if rotation != 0.0:
+            ax.set_xticklabels(ax.get_xticklabels(), rotation=rotation)
+    else:
+        sns.countplot(data=df, y=col, ax=ax, palette=palette, saturation=1)
+        ax.set_ylabel(col)
 
     if title:
         ax.set_title(title)
 
     if annotate:
-        ax.bar_label(ax.containers[0], fmt='%.0f')
-
-    if not horizontal:
-        labels = ax.get_xticklabels()
-        ax.set_xticklabels(labels, rotation=rotation)
+        for container in ax.containers:
+            ax.bar_label(container, fmt='%.0f')
 
     if ax == plt.gca():
         plt.figure(figsize=(10, 10))
