@@ -60,6 +60,7 @@ def display_image(file_path, base_path=''):
     base_directory = os.path.join(base_path, "data/raw/Furniture_Data/")
     full_path = os.path.join(base_directory, file_path)
 
+<<<<<<< Updated upstream
     # Check if the file exists
     if os.path.isfile(full_path):
         try:
@@ -80,6 +81,8 @@ def display_image(file_path, base_path=''):
         print(f"Error: The file '{full_path}' does not exist")
 
 
+=======
+>>>>>>> Stashed changes
 def plot_histogram(df, column_name, bins=10, title=None):
     data_min, data_max = df[column_name].min(), df[column_name].max()
     plt.figure(figsize=(2, 3))
