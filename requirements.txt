@@ -17,3 +17,4 @@ pillow~=10.3.0
 joblib
 annoy
 swifter
+scikeras
