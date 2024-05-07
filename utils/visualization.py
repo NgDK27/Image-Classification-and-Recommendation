@@ -83,10 +83,12 @@ def display_image(file_path, base_path=''):
         print(f"Error: The file '{full_path}' does not exist")
 
 
-def plot_histogram(df, column_name, bins=20, title=None):
-    plt.figure(figsize=(10, 5))
-    plt.hist(df[column_name], bins=bins, color='skyblue', edgecolor='black')
+def plot_histogram(df, column_name, bins=10, title=None):
+    data_min, data_max = df[column_name].min(), df[column_name].max()
+    plt.figure(figsize=(2, 3))
+    plt.hist(df[column_name], bins=bins, color='skyblue', edgecolor='black', range=(data_min, data_max))
     plt.title(title or f'Distribution of {column_name}')
     plt.xlabel(column_name)
     plt.ylabel('Frequency')
+    plt.tight_layout()
     plt.show()
