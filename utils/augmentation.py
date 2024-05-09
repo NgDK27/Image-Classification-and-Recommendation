@@ -18,7 +18,7 @@ def shear_image(image):
 
 
 def crop_image(image):
-    crop_size = random.randint(250, 350)
+    crop_size = random.randint(200, 256)
     left = random.randint(0, image.width - crop_size)
     top = random.randint(0, image.height - crop_size)
     right = left + crop_size
@@ -99,16 +99,16 @@ def stretch_image(image):
     # Resize the image based on the calculated dimensions
     resized_image = image.resize((original_width, new_height), resample=Image.BICUBIC)
 
-    # Create a new canvas of size 350x350
-    final_canvas_size = (350, 350)
+    # Create a new canvas of size 256x256
+    final_canvas_size = (256, 256)
     final_image = Image.new('RGB', final_canvas_size, (255, 255, 255))  # White background
 
     if new_height <= original_height:
-        # Apply padding to fit the output height to 350 (if result is smaller)
+        # Apply padding to fit the output height to 256 (if result is smaller)
         paste_position = ((final_canvas_size[0] - original_width) // 2, 0)
         final_image.paste(resized_image, paste_position)
     else:
-        # Apply padding to make the image square and then resize to 350x350 (if result is larger)
+        # Apply padding to make the image square and then resize to 256x256 (if result is larger)
         # Calculate width to make the image square (same as canvas width)
         new_width = int(original_width * (final_canvas_size[1] / new_height))
 
