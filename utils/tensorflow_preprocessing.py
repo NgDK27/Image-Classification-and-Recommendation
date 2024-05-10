@@ -10,9 +10,9 @@ def create_image_data_generator(rescale=1./255, data_format='channels_last'):
 
 def load_and_process_image(image_path, img_height, img_width, img_data_generator):
     img = tf.io.read_file(image_path)
-    img = tf.image.decode_jpeg(img, channels=3)
-    img = tf.image.resize(img, [img_height, img_width])
-    img = img_data_generator.standardize(img)
+    img = tf.image.decode_jpeg(img, channels=3) # decoding
+    img = tf.image.resize(img, [img_height, img_width]) # rescaling
+    img = img_data_generator.standardize(img) # normalization
     return img
 
 
