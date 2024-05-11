@@ -20,9 +20,9 @@ def load_and_process_image(image_path, augment: bool, img_height, img_width):
         # Flip horizontally
         img = tf.image.flip_left_right(img)
         # Adjust brightness
-        img = tf.image.random_brightness(img, max_delta=0.4)
+        img = tf.image.random_brightness(img, max_delta=0.8)
         # Adjust contrast
-        img = tf.image.random_contrast(img, lower=0.6, upper=1.4)
+        img = tf.image.random_contrast(img, lower=0.2, upper=1.8)
 
         return img
 
@@ -32,7 +32,7 @@ def load_and_process_image(image_path, augment: bool, img_height, img_width):
     return img
 
 
-def prepare_image_dataset(df, img_height, img_width, batch_size, base_path=''):
+def prepare_image_dataset(df, labels, img_height, img_width, batch_size, base_path=''):
     """Prepare image dataset with base path inclusion, including image path in the dataset."""
     def map_fn(path, augment_flag):
         return load_and_process_image(path, augment_flag, img_height, img_width)
@@ -49,8 +49,12 @@ def prepare_image_dataset(df, img_height, img_width, batch_size, base_path=''):
 
     ds = tf.data.Dataset.from_tensor_slices((full_paths, augment_flags))
     ds = ds.map(map_fn, num_parallel_calls=tf.data.AUTOTUNE)
-    ds = ds.batch(batch_size)
-    return ds
+    labels_ds = tf.data.Dataset.from_tensor_slices(labels)
+
+    # Zip the images dataset `ds` with the labels dataset `labels_ds`
+    combined_ds = tf.data.Dataset.zip((ds, labels_ds))
+    combined_ds = combined_ds.batch(batch_size)
+    return combined_ds
 
 
 def show_batch(image_batch, path_batch):
