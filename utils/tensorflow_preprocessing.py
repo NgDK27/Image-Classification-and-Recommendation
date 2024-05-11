@@ -1,29 +1,56 @@
+import os
+
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from PIL import Image
 import matplotlib.pyplot as plt
 import textwrap
 
-
-def create_image_data_generator(rescale=1./255, data_format='channels_last'):
-    return ImageDataGenerator(rescale=rescale, data_format=data_format)
+from utils.augmentation import augment_image
 
 
-def load_and_process_image(image_path, img_height, img_width, img_data_generator):
+# def create_image_data_generator(rescale=1./255, data_format='channels_last'):
+#     return ImageDataGenerator(rescale=rescale, data_format=data_format)
+
+
+def load_and_process_image(image_path, augment: bool, img_height, img_width):
     img = tf.io.read_file(image_path)
     img = tf.image.decode_jpeg(img, channels=3) # decoding
-    img = tf.image.resize(img, [img_height, img_width]) # rescaling
-    img = img_data_generator.standardize(img) # normalization
+
+    def augment_image_tf(img):
+        # Flip horizontally
+        img = tf.image.flip_left_right(img)
+        # Adjust brightness
+        img = tf.image.random_brightness(img, max_delta=0.4)
+        # Adjust contrast
+        img = tf.image.random_contrast(img, lower=0.6, upper=1.4)
+
+        return img
+
+    if augment:
+        img = augment_image_tf(img)
+    img = tf.image.resize(img, [img_height, img_width]) # resizing
     return img
 
 
-def prepare_image_dataset(paths, img_height, img_width, batch_size, img_data_generator, base_path=''):
+def prepare_image_dataset(df, img_height, img_width, batch_size, base_path=''):
     """Prepare image dataset with base path inclusion, including image path in the dataset."""
-    paths = [base_path + '/' + path for path in paths]
-    path_ds = tf.data.Dataset.from_tensor_slices(paths)
-    image_ds = path_ds.map(lambda x: (load_and_process_image(x, img_height, img_width, img_data_generator), x),
-                           num_parallel_calls=tf.data.AUTOTUNE)
-    image_ds = image_ds.batch(batch_size)
-    return image_ds
+    def map_fn(path, augment_flag):
+        return load_and_process_image(path, augment_flag, img_height, img_width)
+
+    paths = df["Path"].values
+    full_paths = []
+
+    # Iterate over each path and join with base_path
+    for path in paths:
+        full_path = os.path.join(base_path, path)
+        full_paths.append(full_path)
+
+    augment_flags = df["Augment"].values
+
+    ds = tf.data.Dataset.from_tensor_slices((full_paths, augment_flags))
+    ds = ds.map(map_fn, num_parallel_calls=tf.data.AUTOTUNE)
+    ds = ds.batch(batch_size)
+    return ds
 
 
 def show_batch(image_batch, path_batch):
