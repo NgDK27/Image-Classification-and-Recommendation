@@ -1,60 +1,43 @@
-import os
-
 import tensorflow as tf
-from PIL import Image
 import matplotlib.pyplot as plt
 import textwrap
+from sklearn.preprocessing import LabelEncoder
 
 from utils.augmentation import augment_image
 
 
-# def create_image_data_generator(rescale=1./255, data_format='channels_last'):
-#     return ImageDataGenerator(rescale=rescale, data_format=data_format)
+def prepare_image_dataset(df, img_height, img_width, batch_size, base_path='../data/raw/Furniture_Data',
+                          label_encoder=None):
 
+    prepared_df = df.assign(Path=df['Path'].apply(lambda path: base_path + "/" + path))
 
-def load_and_process_image(image_path, augment: bool, img_height, img_width):
-    img = tf.io.read_file(image_path)
-    img = tf.image.decode_jpeg(img, channels=3) # decoding
+    # Perform label encoding on the class labels
+    if label_encoder is None:
+        label_encoder = LabelEncoder()
+        prepared_df['Class_Encoded'] = label_encoder.fit_transform(prepared_df['Class'])
+    else:
+        prepared_df['Class_Encoded'] = label_encoder.transform(prepared_df['Class'])
 
-    def augment_image_tf(img):
-        # Flip horizontally
-        img = tf.image.flip_left_right(img)
-        # Adjust brightness
-        img = tf.image.random_brightness(img, max_delta=0.8)
-        # Adjust contrast
-        img = tf.image.random_contrast(img, lower=0.2, upper=1.8)
+    dataset = tf.data.Dataset.from_tensor_slices(
+        (prepared_df['Path'].values,
+         prepared_df["Duplicate_Type"].values,
+         prepared_df['Class_Encoded'].values)
+    )
 
-        return img
+    image_ds = dataset.map(lambda path, duplicate_type, class_label:
+                           (
+                               process_image_from_path(image_path=path,
+                                                       img_height=img_height,
+                                                       img_width=img_width,
+                                                       to_augment=duplicate_type),
+                               class_label
+                           ),
+                           num_parallel_calls=tf.data.AUTOTUNE
+                           )
 
-    if augment:
-        img = augment_image_tf(img)
-    img = tf.image.resize(img, [img_height, img_width]) # resizing
-    return img
+    image_ds = image_ds.batch(batch_size)
 
-
-def prepare_image_dataset(df, labels, img_height, img_width, batch_size, base_path=''):
-    """Prepare image dataset with base path inclusion, including image path in the dataset."""
-    def map_fn(path, augment_flag):
-        return load_and_process_image(path, augment_flag, img_height, img_width)
-
-    paths = df["Path"].values
-    full_paths = []
-
-    # Iterate over each path and join with base_path
-    for path in paths:
-        full_path = os.path.join(base_path, path)
-        full_paths.append(full_path)
-
-    augment_flags = df["Augment"].values
-
-    ds = tf.data.Dataset.from_tensor_slices((full_paths, augment_flags))
-    ds = ds.map(map_fn, num_parallel_calls=tf.data.AUTOTUNE)
-    labels_ds = tf.data.Dataset.from_tensor_slices(labels)
-
-    # Zip the images dataset `ds` with the labels dataset `labels_ds`
-    combined_ds = tf.data.Dataset.zip((ds, labels_ds))
-    combined_ds = combined_ds.batch(batch_size)
-    return combined_ds
+    return image_ds, label_encoder
 
 
 def show_batch(image_batch, path_batch):
@@ -69,3 +52,34 @@ def show_batch(image_batch, path_batch):
         plt.yticks([])  # Remove y-axis ticks
     plt.tight_layout()
     plt.show()
+
+
+def process_image_from_path(image_path, img_height, img_width, to_augment):
+    # Read image
+    img = tf.io.read_file(image_path)
+
+    # Decode to RGB
+    img = tf.io.decode_jpeg(img, channels=3)
+
+    # Resize
+    img = tf.image.resize(img, [img_height, img_width])
+
+    # Augment
+    is_duplicate = tf.equal(to_augment, "Duplicate")
+
+    img = tf.cond(is_duplicate, lambda: augment_image(img), lambda: img)
+
+    rescaling_layer = tf.keras.layers.Rescaling(scale=1. / 255)
+    img = rescaling_layer(img)
+
+    return img
+
+
+def one_hot_encode(image, label):
+    # Normalize image data if needed
+    image = image / 255.0
+
+    # Convert label to one-hot encoded vector
+    label = tf.keras.utils.to_categorical(label, num_classes=17)
+
+    return image, label
