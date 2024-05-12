@@ -15,16 +15,19 @@ def rotate_image(image):
 
 
 def shear_image(image):
-    shear_factor = random.uniform(-0.5, 0.5)
+    shear_factor = random.uniform(-0.3, 0.3)
     return image.transform(image.size, Image.AFFINE, (1, shear_factor, 0, 0, 1, 0), fillcolor='white')
 
 
 def crop_image(image):
-    crop_size = random.randint(250, 350)
-    left = random.randint(0, image.width - crop_size)
-    top = random.randint(0, image.height - crop_size)
-    right = left + crop_size
-    bottom = top + crop_size
+    original_width, original_height = image.size
+
+    crop_width = random.randint(original_width - 50, original_width)
+    crop_height = random.randint(original_height - 50, original_height)
+    left = random.randint(0, original_width - crop_width)
+    top = random.randint(0, original_height - crop_height)
+    right = left + crop_width
+    bottom = top + crop_height
     return image.crop((left, top, right, bottom))
 
 
@@ -47,8 +50,8 @@ def color_jitter_image(image):
     # modified_image = brightness.enhance(brightness_factor)
 
     # Apply contrast enhancement
-    contrast = ImageEnhance.Contrast(modified_image)
-    modified_image = contrast.enhance(contrast_factor)
+    # contrast = ImageEnhance.Contrast(modified_image)
+    # modified_image = contrast.enhance(contrast_factor)
 
     # Apply saturation enhancement
     saturation = ImageEnhance.Color(modified_image)
@@ -89,8 +92,8 @@ def stretch_image(image):
     original_width, original_height = image.size
 
     # Define default range for stretch factor (adjust as needed)
-    min_stretch = -0.3  # Minimum stretch factor (inward stretch)
-    max_stretch = 0.3   # Maximum stretch factor (outward stretch)
+    min_stretch = -0.5  # Minimum stretch factor (inward stretch)
+    max_stretch = 0.5   # Maximum stretch factor (outward stretch)
 
     # Generate a random stretch factor within the specified range
     stretch_factor = random.uniform(min_stretch, max_stretch)
@@ -101,38 +104,31 @@ def stretch_image(image):
     # Resize the image based on the calculated dimensions
     resized_image = image.resize((original_width, new_height), resample=Image.BICUBIC)
 
-    # Create a new canvas of size 350x350
-    final_canvas_size = (350, 350)
-    final_image = Image.new('RGB', final_canvas_size, (255, 255, 255))  # White background
+    # Create a new canvas
+    final_image = Image.new('RGB', (original_width, original_height), (255, 255, 255))  # White background
 
     if new_height <= original_height:
-        # Apply padding to fit the output height to 350 (if result is smaller)
-        paste_position = ((final_canvas_size[0] - original_width) // 2, 0)
+        paste_position = (0, (original_height - new_height) // 2)
         final_image.paste(resized_image, paste_position)
     else:
-        # Apply padding to make the image square and then resize to 350x350 (if result is larger)
-        # Calculate width to make the image square (same as canvas width)
-        new_width = int(original_width * (final_canvas_size[1] / new_height))
+        new_width = int(original_width * (original_height / new_height))
 
         # Resize the image to the calculated square dimensions
-        resized_image = resized_image.resize((new_width, final_canvas_size[1]), resample=Image.BICUBIC)
+        resized_image = resized_image.resize((new_width, original_height), resample=Image.BICUBIC)
 
         # Calculate paste position to center the resized image within the canvas
-        paste_position = ((final_canvas_size[0] - new_width) // 2, 0)
+        paste_position = ((original_width - new_width) // 2, 0)
         final_image.paste(resized_image, paste_position)
 
     return final_image
 
 
-def augment_image(image_bytes, **kwargs):
-    # Open the input image
-    image = Image.open(image_bytes)
-
+def augment_image(image, **kwargs):
     # Define augmentation functions with corresponding parameters
     augmentation_functions = [
         (flip_image, 'flip'),
         (stretch_image, 'stretch'),
-        (shift_image, 'shift'),
+        # (shift_image, 'shift'),
         # (rotate_image, 'rotate'),
         (shear_image, 'shear'),
         # (crop_image, 'crop'),
@@ -150,4 +146,14 @@ def augment_image(image_bytes, **kwargs):
     return image
 
 
+def augment_images_from_paths(path_arr, base_path, out_path):
+    for path in path_arr:
+        input_path = os.path.join(base_path, path)
+        filename = os.path.basename(path)
+        output_path = os.path.join(out_path, filename)
 
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+        img = Image.open(input_path)
+        augment_img = augment_image(img)
+        augment_img.save(output_path)

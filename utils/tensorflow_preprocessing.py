@@ -1,18 +1,13 @@
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
 import textwrap
 
 
-def create_image_data_generator(rescale=1./255, data_format='channels_last'):
-    return ImageDataGenerator(rescale=rescale, data_format=data_format)
-
-
 def load_and_process_image(image_path, img_height, img_width, img_data_generator):
     img = tf.io.read_file(image_path)
-    img = tf.image.decode_jpeg(img, channels=3) # decoding
-    img = tf.image.resize(img, [img_height, img_width]) # rescaling
-    img = img_data_generator.standardize(img) # normalization
+    img = tf.io.decode_jpeg(img, channels=3)  # decoding
+    img = tf.image.resize(img, [img_height, img_width])  # resizing
+    img = tf.keras.layers.Rescaling(img)  # normalization
     return img
 
 
