@@ -3,6 +3,16 @@ import matplotlib.pyplot as plt
 import textwrap
 
 
+def one_hot_encode(image, label):
+    # Normalize image data if needed
+    image = image / 255.0
+
+    # Convert label to one-hot encoded vector
+    label = tf.keras.utils.to_categorical(label, num_classes=17)
+
+    return image, label
+
+
 def load_and_process_image(image_path, img_height, img_width, img_data_generator):
     img = tf.io.read_file(image_path)
     img = tf.io.decode_jpeg(img, channels=3)  # decoding
@@ -33,3 +43,5 @@ def show_batch(image_batch, path_batch):
         plt.yticks([])  # Remove y-axis ticks
     plt.tight_layout()
     plt.show()
+
+
