@@ -4,6 +4,8 @@ import textwrap
 
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
+from utils.augmentation import augment_image
+
 
 # def load_and_process_image(image_path, img_height, img_width, img_data_generator):
 #     img = tf.io.read_file(image_path)
@@ -50,14 +52,7 @@ def process_image_from_path(image_path, img_height, img_width, to_augment="Uniqu
     # Augment only images marked as "Duplicate"
     is_duplicate = tf.equal(to_augment, "Duplicate")
 
-    def augment_image_tf(image):
-        image = tf.image.random_flip_left_right(image)
-        image = tf.image.random_hue(image, 0.2)
-        image = tf.image.random_saturation(image, lower=0.5, upper=1.5)
-        image = tf.image.random_contrast(image, lower=0.5, upper=1.5)
-        return image
-
-    img = tf.cond(is_duplicate, lambda: augment_image_tf(img), lambda: img)
+    img = tf.cond(is_duplicate, lambda: augment_image(img), lambda: img)
 
     # Rescale pixel value
     rescaling_layer = tf.keras.layers.Rescaling(scale=1. / 255)
