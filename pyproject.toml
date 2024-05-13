@@ -26,10 +26,18 @@ dependencies = [
     "annoy",
     "swifter",
     "scikeras",
+    "pickleshare>=0.7.5",
 ]
+
 requires-python = "<3.12,>=3.11"
 readme = "README.md"
 license = {text = "MIT"}
+
+[project.optional-dependencies]
+macos = [
+    "tensorflow-io-gcs-filesystem==0.37.0",
+    "tensorflow-metal"
+]
 
 [build-system]
 requires = ["pdm-backend"]

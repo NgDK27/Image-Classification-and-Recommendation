@@ -69,6 +69,7 @@ def prepare_image_target_dataset(df, target_name, img_height=256, img_width=256,
 
     # Label encoding
     # For "Class" target
+    new_label_encoder = None
     if target_name == "Class":
         if label_encoder is None:
             new_label_encoder = LabelEncoder()
@@ -103,7 +104,7 @@ def prepare_image_target_dataset(df, target_name, img_height=256, img_width=256,
 
     image_ds = image_ds.batch(batch_size)
 
-    return image_ds, label_encoder
+    return image_ds, new_label_encoder
 
 
 def prepare_image_dataset(df, img_height=256, img_width=256, batch_size=32, base_path='../data/raw/Furniture_Data'):

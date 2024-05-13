@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:2a8ae8102ff742cc59465999b1f0e6215dcd36751b7a8dfda380ce88691d9d59"
+content_hash = "sha256:99de1f673345df0979fc74f0f2e64c3f3c9b09f0b4bf41be0c51ad96d48115a2"
 
 [[package]]
 name = "absl-py"
@@ -1054,34 +1054,34 @@ files = [
 
 [[package]]
 name = "jupyter-server"
-version = "2.14.0"
+version = "2.13.0"
 requires_python = ">=3.8"
 summary = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications."
 groups = ["default"]
 dependencies = [
     "anyio>=3.1.0",
-    "argon2-cffi>=21.1",
-    "jinja2>=3.0.3",
+    "argon2-cffi",
+    "jinja2",
     "jupyter-client>=7.4.4",
     "jupyter-core!=5.0.*,>=4.12",
     "jupyter-events>=0.9.0",
-    "jupyter-server-terminals>=0.4.4",
+    "jupyter-server-terminals",
     "nbconvert>=6.4.4",
     "nbformat>=5.3.0",
-    "overrides>=5.0",
-    "packaging>=22.0",
-    "prometheus-client>=0.9",
-    "pywinpty>=2.0.1; os_name == \"nt\"",
+    "overrides",
+    "packaging",
+    "prometheus-client",
+    "pywinpty; os_name == \"nt\"",
     "pyzmq>=24",
     "send2trash>=1.8.2",
     "terminado>=0.8.3",
     "tornado>=6.2.0",
     "traitlets>=5.6.0",
-    "websocket-client>=1.7",
+    "websocket-client",
 ]
 files = [
-    {file = "jupyter_server-2.14.0-py3-none-any.whl", hash = "sha256:fb6be52c713e80e004fac34b35a0990d6d36ba06fd0a2b2ed82b899143a64210"},
-    {file = "jupyter_server-2.14.0.tar.gz", hash = "sha256:659154cea512083434fd7c93b7fe0897af7a2fd0b9dd4749282b42eaac4ae677"},
+    {file = "jupyter_server-2.13.0-py3-none-any.whl", hash = "sha256:77b2b49c3831fbbfbdb5048cef4350d12946191f833a24e5f83e5f8f4803e97b"},
+    {file = "jupyter_server-2.13.0.tar.gz", hash = "sha256:c80bfb049ea20053c3d9641c2add4848b38073bf79f1729cea1faed32fc1c78e"},
 ]
 
 [[package]]
@@ -1565,13 +1565,16 @@ files = [
 
 [[package]]
 name = "packaging"
-version = "24.0"
-requires_python = ">=3.7"
+version = "21.3"
+requires_python = ">=3.6"
 summary = "Core utilities for Python packages"
 groups = ["default"]
+dependencies = [
+    "pyparsing!=3.0.5,>=2.0.2",
+]
 files = [
-    {file = "packaging-24.0-py3-none-any.whl", hash = "sha256:2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5"},
-    {file = "packaging-24.0.tar.gz", hash = "sha256:eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9"},
+    {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
+    {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
 
 [[package]]
@@ -1646,6 +1649,16 @@ dependencies = [
 files = [
     {file = "pexpect-4.9.0-py2.py3-none-any.whl", hash = "sha256:7236d1e080e4936be2dc3e326cec0af72acf9212a7e1d060210e70a47e253523"},
     {file = "pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f"},
+]
+
+[[package]]
+name = "pickleshare"
+version = "0.7.5"
+summary = "Tiny 'shelve'-like database with concurrency support"
+groups = ["default"]
+files = [
+    {file = "pickleshare-0.7.5-py2.py3-none-any.whl", hash = "sha256:9649af414d74d4df115d5d718f82acb59c9d418196b7b4290ed47a12ce62df56"},
+    {file = "pickleshare-0.7.5.tar.gz", hash = "sha256:87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca"},
 ]
 
 [[package]]
@@ -2187,19 +2200,17 @@ files = [
 
 [[package]]
 name = "scikeras"
-version = "0.12.0"
-requires_python = ">=3.8.0,<3.12.0"
+version = "0.4.1"
+requires_python = ">=3.6.1,<4.0"
 summary = "Scikit-Learn API wrapper for Keras."
 groups = ["default"]
 dependencies = [
-    "packaging>=0.21",
-    "scikit-learn>=1.0.0",
-    "tensorflow-io-gcs-filesystem<0.32,>=0.23.1; sys_platform == \"win32\"",
-    "tensorflow-metal<2.0.0,>=1.1.0; sys_platform == \"darwin\" and platform_machine == \"arm64\"",
+    "packaging<22.0,>=0.21",
+    "scikit-learn>=0.22.0",
 ]
 files = [
-    {file = "scikeras-0.12.0-py3-none-any.whl", hash = "sha256:2d69a4a70118f8a0ffb1b2487b25f7c668f36ab83425fdf9a3271eb02da739ab"},
-    {file = "scikeras-0.12.0.tar.gz", hash = "sha256:f60d81255a8904671bd33cbff060926cfa5ddd52fa234b12290afe3cb69dcc6c"},
+    {file = "scikeras-0.4.1-py3-none-any.whl", hash = "sha256:e61755f29df5b23aa30b3e6ddc8889607a6dcd936cb441de6207d185b0429ab4"},
+    {file = "scikeras-0.4.1.tar.gz", hash = "sha256:851f00d2477ea166eebe5ef093c82cd29ef67b7efd90fa12a2889adcfafccaf5"},
 ]
 
 [[package]]
@@ -2454,29 +2465,15 @@ files = [
 
 [[package]]
 name = "tensorflow-io-gcs-filesystem"
-version = "0.31.0"
-requires_python = ">=3.7, <3.12"
+version = "0.37.0"
+requires_python = "<3.12,>=3.7"
 summary = "TensorFlow IO"
 groups = ["default"]
 files = [
-    {file = "tensorflow_io_gcs_filesystem-0.31.0-cp311-cp311-macosx_10_14_x86_64.whl", hash = "sha256:8909c4344b0e96aa356230ab460ffafe5900c33c1aaced65fafae71d177a1966"},
-    {file = "tensorflow_io_gcs_filesystem-0.31.0-cp311-cp311-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:e417faf8755aafe52d8f8c6b5ae5bae6e4fae8326ee3acd5e9181b83bbfbae87"},
-    {file = "tensorflow_io_gcs_filesystem-0.31.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:37c40e3c4ee1f8dda3b545deea6b8839192c82037d8021db9f589908034ad975"},
-    {file = "tensorflow_io_gcs_filesystem-0.31.0-cp311-cp311-win_amd64.whl", hash = "sha256:4bb37d23f21c434687b11059cb7ffd094d52a7813368915ba1b7057e3c16e414"},
-]
-
-[[package]]
-name = "tensorflow-metal"
-version = "1.1.0"
-summary = "TensorFlow acceleration for Mac GPUs."
-groups = ["default"]
-marker = "sys_platform == \"darwin\" and platform_machine == \"arm64\""
-dependencies = [
-    "six>=1.15.0",
-    "wheel~=0.35",
-]
-files = [
-    {file = "tensorflow_metal-1.1.0-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:1c365669fc9d764edcc1773254a477db7096975b1bff58fb37a11d7b8ca4295f"},
+    {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-macosx_10_14_x86_64.whl", hash = "sha256:eab6e4c1daf7ddbfef608cd8e2102861021678dfb3f6a7fb3f613db9d6992919"},
+    {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:4ec3c0d0a9d3676a2e74198e3dff66d74c7c34f974257f2176236d0703b31a0e"},
+    {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:af0f79400656bb88bf326d2b8e63aef49c07a0ce8c14c3e2589a62e765d8c21f"},
+    {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:13bc337f2c2db63a39c81c8fd0ececc0c3d5fcf4ce229dfed0b0085a23dd60e9"},
 ]
 
 [[package]]
