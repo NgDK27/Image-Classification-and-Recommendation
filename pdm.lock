@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default"]
+groups = ["default", "macos"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:99de1f673345df0979fc74f0f2e64c3f3c9b09f0b4bf41be0c51ad96d48115a2"
+content_hash = "sha256:8005654b45fd554b1cb7d5d2d9f5c9b2bed7a7dd4cb255900142efcf29ab4383"
 
 [[package]]
 name = "absl-py"
@@ -2321,7 +2321,7 @@ name = "six"
 version = "1.16.0"
 requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 summary = "Python 2 and 3 compatibility utilities"
-groups = ["default"]
+groups = ["default", "macos"]
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
@@ -2468,12 +2468,25 @@ name = "tensorflow-io-gcs-filesystem"
 version = "0.37.0"
 requires_python = "<3.12,>=3.7"
 summary = "TensorFlow IO"
-groups = ["default"]
+groups = ["default", "macos"]
 files = [
     {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-macosx_10_14_x86_64.whl", hash = "sha256:eab6e4c1daf7ddbfef608cd8e2102861021678dfb3f6a7fb3f613db9d6992919"},
     {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:4ec3c0d0a9d3676a2e74198e3dff66d74c7c34f974257f2176236d0703b31a0e"},
     {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:af0f79400656bb88bf326d2b8e63aef49c07a0ce8c14c3e2589a62e765d8c21f"},
     {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:13bc337f2c2db63a39c81c8fd0ececc0c3d5fcf4ce229dfed0b0085a23dd60e9"},
+]
+
+[[package]]
+name = "tensorflow-metal"
+version = "1.1.0"
+summary = "TensorFlow acceleration for Mac GPUs."
+groups = ["macos"]
+dependencies = [
+    "six>=1.15.0",
+    "wheel~=0.35",
+]
+files = [
+    {file = "tensorflow_metal-1.1.0-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:1c365669fc9d764edcc1773254a477db7096975b1bff58fb37a11d7b8ca4295f"},
 ]
 
 [[package]]
@@ -2714,7 +2727,7 @@ name = "wheel"
 version = "0.43.0"
 requires_python = ">=3.8"
 summary = "A built-package format for Python"
-groups = ["default"]
+groups = ["default", "macos"]
 files = [
     {file = "wheel-0.43.0-py3-none-any.whl", hash = "sha256:55c570405f142630c6b9f72fe09d9b67cf1477fcf543ae5b8dcb1f5b7377da81"},
     {file = "wheel-0.43.0.tar.gz", hash = "sha256:465ef92c69fa5c5da2d1cf8ac40559a8c940886afcef87dcf14b9470862f1d85"},
