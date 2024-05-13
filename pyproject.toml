@@ -1,0 +1,40 @@
+[project]
+name = "Image-Classification-and-Recommendation"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Quân Đỗ", email = "aloha.quando@gmail.com"},
+]
+dependencies = [
+    "jupyter",
+    "tqdm",
+    "ipython",
+    "numpy",
+    "matplotlib~=3.8.4",
+    "graphviz",
+    "pydot",
+    "pandas~=2.2.2",
+    "seaborn~=0.13.2",
+    "scikit-learn",
+    "scikit-image",
+    "imagehash",
+    "tensorflow",
+    "keras",
+    "keras-tuner",
+    "pillow~=10.3.0",
+    "joblib",
+    "annoy",
+    "swifter",
+    "scikeras",
+]
+requires-python = "<3.13,>=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
