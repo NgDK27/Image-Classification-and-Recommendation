@@ -2,33 +2,25 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import textwrap
 
-
-def one_hot_encode(image, label):
-    # Normalize image data if needed
-    image = image / 255.0
-
-    # Convert label to one-hot encoded vector
-    label = tf.keras.utils.to_categorical(label, num_classes=17)
-
-    return image, label
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
 
-def load_and_process_image(image_path, img_height, img_width, img_data_generator):
-    img = tf.io.read_file(image_path)
-    img = tf.io.decode_jpeg(img, channels=3)  # decoding
-    img = tf.image.resize(img, [img_height, img_width])  # resizing
-    img = tf.keras.layers.Rescaling(img)  # normalization
-    return img
-
-
-def prepare_image_dataset(paths, img_height, img_width, batch_size, img_data_generator, base_path=''):
-    """Prepare image dataset with base path inclusion, including image path in the dataset."""
-    paths = [base_path + '/' + path for path in paths]
-    path_ds = tf.data.Dataset.from_tensor_slices(paths)
-    image_ds = path_ds.map(lambda x: (load_and_process_image(x, img_height, img_width, img_data_generator), x),
-                           num_parallel_calls=tf.data.AUTOTUNE)
-    image_ds = image_ds.batch(batch_size)
-    return image_ds
+# def load_and_process_image(image_path, img_height, img_width, img_data_generator):
+#     img = tf.io.read_file(image_path)
+#     img = tf.io.decode_jpeg(img, channels=3)  # decoding
+#     img = tf.image.resize(img, [img_height, img_width])  # resizing
+#     img = tf.keras.layers.Rescaling(img)  # normalization
+#     return img
+#
+#
+# def prepare_image_dataset(paths, img_height, img_width, batch_size, img_data_generator, base_path=''):
+#     """Prepare image dataset with base path inclusion, including image path in the dataset."""
+#     paths = [base_path + '/' + path for path in paths]
+#     path_ds = tf.data.Dataset.from_tensor_slices(paths)
+#     image_ds = path_ds.map(lambda x: (load_and_process_image(x, img_height, img_width, img_data_generator), x),
+#                            num_parallel_calls=tf.data.AUTOTUNE)
+#     image_ds = image_ds.batch(batch_size)
+#     return image_ds
 
 
 def show_batch(image_batch, path_batch):
@@ -45,3 +37,96 @@ def show_batch(image_batch, path_batch):
     plt.show()
 
 
+def process_image_from_path(image_path, img_height, img_width, to_augment="Unique"):
+    # Read image
+    img = tf.io.read_file(image_path)
+
+    # Decode to RGB
+    img = tf.io.decode_jpeg(img, channels=3)
+
+    # Resize
+    img = tf.image.resize(img, [img_height, img_width])
+
+    # Augment only images marked as "Duplicate"
+    is_duplicate = tf.equal(to_augment, "Duplicate")
+
+    def augment_image_tf(image):
+        image = tf.image.random_flip_left_right(image)
+        image = tf.image.random_hue(image, 0.2)
+        image = tf.image.random_saturation(image, lower=0.5, upper=1.5)
+        image = tf.image.random_contrast(image, lower=0.5, upper=1.5)
+        return image
+
+    img = tf.cond(is_duplicate, lambda: augment_image_tf(img), lambda: img)
+
+    # Rescale pixel value
+    rescaling_layer = tf.keras.layers.Rescaling(scale=1. / 255)
+    img = rescaling_layer(img)
+
+    return img
+
+
+def prepare_image_target_dataset(df, target_name, img_height=256, img_width=256, batch_size=32,
+                                 base_path='../data/raw/Furniture_Data',
+                                 label_encoder=None):
+    # Complete path
+    prepared_df = df.assign(Path=df['Path'].apply(lambda path: base_path + "/" + path))
+
+    # Label encoding
+    # For "Class" target
+    if target_name == "Class":
+        if label_encoder is None:
+            new_label_encoder = LabelEncoder()
+            prepared_df['Target'] = new_label_encoder.fit_transform(prepared_df['Class'])
+        else:
+            prepared_df['Target'] = label_encoder.transform(prepared_df['Class'])
+    # For "Style" target
+    elif target_name == "Style":
+        if label_encoder is None:
+            new_label_encoder = OneHotEncoder()
+            prepared_df['Target'] = new_label_encoder.fit_transform(prepared_df['Style'])
+        else:
+            prepared_df['Target'] = label_encoder.transform(prepared_df['Style'])
+
+    # Convert to tensor
+    dataset = tf.data.Dataset.from_tensor_slices(
+        (prepared_df['Path'].values,
+         prepared_df["Duplicate_Type"].values,
+         prepared_df['Target'].values)
+    )
+
+    image_ds = dataset.map(lambda path, duplicate_type, target:
+                           (
+                               process_image_from_path(image_path=path,
+                                                       img_height=img_height,
+                                                       img_width=img_width,
+                                                       to_augment=duplicate_type),
+                               target
+                           ),
+                           num_parallel_calls=tf.data.AUTOTUNE
+                           )
+
+    image_ds = image_ds.batch(batch_size)
+
+    return image_ds, label_encoder
+
+
+def prepare_image_dataset(df, img_height=256, img_width=256, batch_size=32, base_path='../data/raw/Furniture_Data'):
+    # Complete path
+    prepared_df = df.assign(Path=df['Path'].apply(lambda path: base_path + "/" + path))
+
+    # Convert to tensor
+    dataset = tf.data.Dataset.from_tensor_slices(prepared_df['Path'].values)
+
+    image_ds = dataset.map(lambda path:
+                           (
+                               process_image_from_path(image_path=path,
+                                                       img_height=img_height,
+                                                       img_width=img_width),
+                           ),
+                           num_parallel_calls=tf.data.AUTOTUNE
+                           )
+
+    image_ds = image_ds.batch(batch_size)
+
+    return image_ds
