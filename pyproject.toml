@@ -18,7 +18,7 @@ dependencies = [
     "scikit-learn",
     "scikit-image",
     "imagehash",
-    "tensorflow",
+    "tensorflow==2.15.1",
     "keras",
     "keras-tuner",
     "pillow~=10.3.0",
@@ -27,7 +27,7 @@ dependencies = [
     "swifter",
     "scikeras",
 ]
-requires-python = "<3.13,>=3.11"
+requires-python = "<3.12,>=3.11"
 readme = "README.md"
 license = {text = "MIT"}
 
