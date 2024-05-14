@@ -126,3 +126,24 @@ def prepare_image_dataset(df, img_height=256, img_width=256, batch_size=32, base
     image_ds = image_ds.batch(batch_size)
 
     return image_ds
+
+def process_image_for_model(image_path, img_height, img_width, to_augment="Unique"):
+    # Read image
+    img = tf.io.read_file(image_path)
+
+    # Decode to RGB
+    img = tf.io.decode_jpeg(img, channels=3)
+
+    # Resize
+    img = tf.image.resize(img, [img_height, img_width])
+
+    # Augment only images marked as "Duplicate"
+    is_duplicate = tf.equal(to_augment, "Duplicate")
+
+    img = tf.cond(is_duplicate, lambda: augment_image(img), lambda: img)
+
+    # Rescale pixel value
+    rescaling_layer = tf.keras.layers.Rescaling(scale=1. / 255)
+    img = rescaling_layer(img)
+
+    return img
