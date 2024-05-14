@@ -39,6 +39,10 @@ macos = [
     "tensorflow-metal",
 ]
 
+windows = [
+    "tensorflow-io-gcs-filesystem==0.31.0",
+]
+
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
