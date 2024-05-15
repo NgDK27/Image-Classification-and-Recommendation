@@ -7,24 +7,6 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from utils.augmentation import augment_image
 
 
-# def load_and_process_image(image_path, img_height, img_width, img_data_generator):
-#     img = tf.io.read_file(image_path)
-#     img = tf.io.decode_jpeg(img, channels=3)  # decoding
-#     img = tf.image.resize(img, [img_height, img_width])  # resizing
-#     img = tf.keras.layers.Rescaling(img)  # normalization
-#     return img
-#
-#
-# def prepare_image_dataset(paths, img_height, img_width, batch_size, img_data_generator, base_path=''):
-#     """Prepare image dataset with base path inclusion, including image path in the dataset."""
-#     paths = [base_path + '/' + path for path in paths]
-#     path_ds = tf.data.Dataset.from_tensor_slices(paths)
-#     image_ds = path_ds.map(lambda x: (load_and_process_image(x, img_height, img_width, img_data_generator), x),
-#                            num_parallel_calls=tf.data.AUTOTUNE)
-#     image_ds = image_ds.batch(batch_size)
-#     return image_ds
-
-
 def show_batch(image_batch, path_batch):
     """Visualize an image batch along with their paths."""
     plt.figure(figsize=(15, 15))
@@ -145,5 +127,7 @@ def process_image_for_model(image_path, img_height, img_width, to_augment="Uniqu
     # Rescale pixel value
     rescaling_layer = tf.keras.layers.Rescaling(scale=1. / 255)
     img = rescaling_layer(img)
+
+    img = tf.expand_dims(img, axis=0)
 
     return img
