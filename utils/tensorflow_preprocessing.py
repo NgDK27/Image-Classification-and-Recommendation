@@ -1,6 +1,7 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import textwrap
+import pandas as pd
 
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
@@ -50,28 +51,43 @@ def prepare_image_target_dataset(df, target_name, img_height=256, img_width=256,
     prepared_df = df.assign(Path=df['Path'].apply(lambda path: base_path + "/" + path))
 
     # Label encoding
+    new_label_encoder = label_encoder
+    dataset = None
+
     # For "Class" target
-    new_label_encoder = None
     if target_name == "Class":
-        if label_encoder is None:
+        if new_label_encoder is None:
             new_label_encoder = LabelEncoder()
             prepared_df['Target'] = new_label_encoder.fit_transform(prepared_df['Class'])
         else:
-            prepared_df['Target'] = label_encoder.transform(prepared_df['Class'])
+            prepared_df['Target'] = new_label_encoder.transform(prepared_df['Class'])
+
+        # Convert to tensor
+        dataset = tf.data.Dataset.from_tensor_slices(
+            (prepared_df['Path'].values,
+             prepared_df["Duplicate_Type"].values,
+             prepared_df['Target'].values)
+        )
+
     # For "Style" target
     elif target_name == "Style":
-        if label_encoder is None:
+        if new_label_encoder is None:
             new_label_encoder = OneHotEncoder()
-            prepared_df['Target'] = new_label_encoder.fit_transform(prepared_df['Style'])
+            labels = new_label_encoder.fit_transform(prepared_df['Style'].values.reshape(-1, 1))
+            labels_df = pd.DataFrame(labels.toarray(), columns=new_label_encoder.get_feature_names_out(['Style']))
+            prepared_df = pd.concat([prepared_df, labels_df], axis=1)
         else:
-            prepared_df['Target'] = label_encoder.transform(prepared_df['Style'])
+            labels = new_label_encoder.transform(prepared_df['Style'].values.reshape(-1, 1))
+            labels_df = pd.DataFrame(labels.toarray(), columns=new_label_encoder.get_feature_names_out(['Style']))
+            prepared_df = pd.concat([prepared_df, labels_df], axis=1)
 
-    # Convert to tensor
-    dataset = tf.data.Dataset.from_tensor_slices(
-        (prepared_df['Path'].values,
-         prepared_df["Duplicate_Type"].values,
-         prepared_df['Target'].values)
-    )
+        # Convert to tensor
+        target_columns = new_label_encoder.get_feature_names_out(['Style'])
+        dataset = tf.data.Dataset.from_tensor_slices(
+            (prepared_df['Path'].values,
+             prepared_df["Duplicate_Type"].values,
+             prepared_df[target_columns].values)
+        )
 
     image_ds = dataset.map(lambda path, duplicate_type, target:
                            (
