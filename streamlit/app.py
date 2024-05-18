@@ -48,12 +48,12 @@ if uploaded_file is not None:  # Check if a file has been uploaded
             sizes = predictions1[0]  # prediction for each class
             # Plotly graph
             fig = go.Figure(data=[go.Pie(labels=classes, values=sizes, textinfo='label+percent', hole=.3)])
-            fig.update_traces(hoverinfo='label+percent', textfont_size=12, marker=dict(line=dict(color='#000000', width=1)))
+            # fig.update_traces(hoverinfo='label+percent', textfont_size=12, marker=dict(line=dict(color='#000000', width=1)))
             st.plotly_chart(fig, use_container_width=True)
 
             most_likely_class = classes[predicted1_index]  # Determine the class with the highest probability
             most_likely_prob = predictions1[0][predicted1_index]  # Get the highest probability value
-            st.markdown('##### ② Same Furniture Class Result:')  # 결과 표시
+            st.markdown('##### ② Same Furniture Class Result:')
             st.write(f"- {most_likely_class} ({most_likely_prob:.8f}%)")
     else:
         st.error("Failed to process the image. Please check the logs for more information.")  # Display an error if image processing fails
@@ -84,9 +84,8 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)  # Reopen the uploaded file for display
     st.image(image, caption='Uploaded Image', width=256)  # Display the image again
     if image_array is not None:
-        predictions3, predicted3_index = predict(model3, image_array)  # Use the task3 model to predict the style of the furniture
-        if predictions3 is not None:
-            predicted_class, predicted_styles, all_predictions, recommendations = classify_and_recommend(image_array, model1, model3)
+        predicted_class, predicted_styles, all_predictions, recommendations = classify_and_recommend(image_array, model1, model3)
+        if all_predictions is not None:
 
             st.markdown('##### ① Same Interior Style Predictions:')
             for style, probability in all_predictions:
@@ -135,7 +134,7 @@ if uploaded_file is not None:
                 if not exceeded_threshold:
                     if close_styles:
                         for style, prob in close_styles:
-                            st.write(f"- {style}: {prob:.8f}")
+                            st.write(f"- {style} ({prob:.8f}%)")
                     else:
                         # If there are no close styles, display only the style with the highest probability
                         st.write(f"- {most_likely_style} ({highest_probability:.8f}%)")
