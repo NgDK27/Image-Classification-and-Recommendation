@@ -97,30 +97,40 @@ def load_cluster_model(model_path):
     cluster_model = load(model_path)  # Load a clustering model
     return cluster_model
 
-def classify_and_recommend(image_array, class_model, style_model, threshold=0.2):
-    classes = load_classes('../data/label_encoders/class_encoder.npy')  # Load class labels
-    styles = load_styles('../data/label_encoders/style_encoder.npy')  # Load style labels
+def classify_and_recommend(image_array, class_model, style_model, threshold=0.3, close_threshold=0.01):
+    # Load the labels for classes and styles from predefined encoders
+    classes = load_classes('../data/label_encoders/class_encoder.npy')
+    styles = load_styles('../data/label_encoders/style_encoder.npy')
     
-    class_pred = class_model.predict(image_array)  # Predict class
-    style_pred = style_model.predict(image_array)  # Predict style
+    # Predict the class and style from the provided models
+    class_pred = class_model.predict(image_array)
+    style_pred = style_model.predict(image_array)
 
-    predicted_class_idx = np.argmax(class_pred, axis=1)[0]  # Index of predicted class
-    predicted_class = classes[predicted_class_idx]  # Name of predicted class
+    # Combine style labels with their corresponding prediction probabilities
+    all_predictions = list(zip(styles, style_pred.flatten().tolist()))
 
-    predicted_style_indices = np.where(style_pred > threshold)[1]  # Indices of styles exceeding threshold
-    predicted_styles = [styles[idx] for idx in predicted_style_indices] if predicted_style_indices.size > 0 else [styles[np.argmax(style_pred)]]  # List of predicted styles
+    # Identify the most likely class from the predictions
+    predicted_class_idx = np.argmax(class_pred, axis=1)[0]
+    predicted_class = classes[predicted_class_idx]
 
-    # Filter recommendations
+    # Use close_threshold to select multiple closely scored styles
+    max_style_prob = np.max(style_pred)
+    predicted_style_indices = [i for i, prob in enumerate(style_pred.flatten()) if prob >= max_style_prob - close_threshold]
+    predicted_styles = [styles[i] for i in predicted_style_indices]
+
+    # Filter recommendations based on the predicted class and selected styles
     filtered_recommendations = recommendations_df[
         (recommendations_df['Class'] == predicted_class) & 
         (recommendations_df['Style'].isin(predicted_styles))
     ]
 
-    image_feature_vector = feature_extraction_model.predict(image_array).reshape(1, -1)  # Extract image feature vector
-    filtered_features = filtered_recommendations.filter(regex='^x[0-9]+').values  # Extract feature data from recommendations
-
+    # Extract the feature vector of the image using the feature extraction model
+    image_feature_vector = feature_extraction_model.predict(image_array).reshape(1, -1)
+    # Retrieve feature data from the filtered recommendations
+    filtered_features = filtered_recommendations.filter(regex='^x[0-9]+').values
+    
     cosine_similarities = cosine_similarity(image_feature_vector, filtered_features)  # Compute cosine similarities
     top_indices = np.argsort(-cosine_similarities.flatten())[:10]  # Top 10 recommendations
-
     top_recommendations = filtered_recommendations.iloc[top_indices]
-    return predicted_class, predicted_styles, top_recommendations
+    
+    return predicted_class, predicted_styles, all_predictions, top_recommendations
