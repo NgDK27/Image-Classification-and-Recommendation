@@ -4,25 +4,25 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 import tensorflow as tf
-# from sklearn.cluster import KMeans
 import os
 from joblib import load
 from sklearn.metrics.pairwise import cosine_similarity
 from tensorflow.keras.models import load_model
+from sklearn.metrics.pairwise import cosine_similarity
 
 
-
+# Configure logging to help in debugging and log management
 logging.basicConfig(filename='app.log', level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 
 ### Common Functions
-@st.cache_resource
+@st.cache_resource  # Use Streamlit's caching to avoid reloading model from disk repeatedly
 def load_model(model_path):
-    if os.path.exists(model_path):
+    if os.path.exists(model_path):  # Check if the model path exists
         try:
-            model = tf.keras.models.load_model(model_path)
+            model = tf.keras.models.load_model(model_path)  # Load the Keras model
             logging.info(f"Model loaded successfully from {model_path}.")
             return model
         except Exception as e:
@@ -33,26 +33,17 @@ def load_model(model_path):
         return None
 
 
-def prepare_image(uploaded_file):
-    try:
-        image = Image.open(uploaded_file).convert('RGB')
-        image = image.resize((256, 256))  # resizing
-        image_array = np.array(image) / 255.0  # normalization
-        image_array = np.expand_dims(image_array, axis=0)  # batch processing
-        logging.info("Image processed successfully.")
-        return image_array
-    except Exception as e:
-        logging.error("Failed to process the image: " + str(e), exc_info=True)
-        st.error("Failed to process the image. Please try another file.")
-        return None
-    
+### Task-1-CNN
+def load_classes(filename):
+    class_data = np.load(filename, allow_pickle=True)  # Load class data using numpy
+    return class_data.tolist()
 
 def predict(model, image_array):
-    if model is not None and image_array is not None:
+    if model is not None and image_array is not None:  # Ensure model and image array are not None
         try:
-            predictions = model.predict(image_array)
+            predictions = model.predict(image_array)  # Make predictions using the model
             logging.info("Prediction executed successfully.")
-            predicted_index = np.argmax(predictions, axis=1)[0]
+            predicted_index = np.argmax(predictions, axis=1)[0]  # Find the index of the highest probability
             return predictions, predicted_index
         except Exception as e:
             logging.error("Failed to make predictions.", exc_info=True)
@@ -61,38 +52,75 @@ def predict(model, image_array):
         logging.error("Model or image array is None, prediction cannot be performed.")
         return None
 
+def prepare_image(uploaded_file):
+    try:
+        # Process the image for model input
+        image = Image.open(uploaded_file).convert('RGBA')  # Convert image to RGBA to handle transparency
+        background = Image.new('RGBA', image.size, (255, 255, 255))  # Create a white background
+        image_with_background = Image.alpha_composite(background, image).convert('RGB')  # Composite with white background
 
+        image_resized = image_with_background.resize((256, 256))  # Resize image to expected model input size
+        image_array = np.array(image_resized) / 255.0  # Convert to array and normalize pixel values
+        image_array = np.expand_dims(image_array, axis=0)  # Add batch dimension for model input
 
-### Task-1-CNN
-def load_classes(filename):
-    class_data = np.load(filename, allow_pickle=True)
-    return class_data.tolist()
-
+        logging.info("Image processed successfully.")
+        return image_array
+    except Exception as e:
+        logging.error("Failed to process the image: " + str(e), exc_info=True)
+        st.error("Failed to process the image. Please try another file.")  # Show error in Streamlit
+        return None
 
 
 ### Task-2
-feature_extraction_model = load_model('../data/models/fe-cnn')
-recommendations_df = pd.read_csv('../data/recommend/csv/recommendations.csv')
-
-database_features = recommendations_df.filter(regex='^x[0-9]+').values
+feature_extraction_model = load_model('../data/models/fe-cnn')  # Load the feature extraction model
+recommendations_df = pd.read_csv('../data/recommend/csv/recommendations.csv')  # Load recommendations data
 
 @st.cache_resource
 def preprocess_and_predict(image_array):
-    feature_vector = feature_extraction_model.predict(image_array)
+    feature_vector = feature_extraction_model.predict(image_array)  # Extract features from the image
     return feature_vector
 
 @st.cache_resource
-def find_similar_items(feature_vector):
-    similarities = cosine_similarity(feature_vector, database_features)
-    top_indices = np.argsort(similarities[0])[::-1][:10]
+def find_similar_items(feature_vector, filtered_recommendations):
+    database_features = filtered_recommendations.filter(regex='^x[0-9]+').values  # Extract feature columns
+    cosine_similarities = cosine_similarity(feature_vector, database_features)  # Compute cosine similarity
+    top_indices = np.argsort(cosine_similarities[0])[::-1][:10]  # Get top 10 similar items
     return top_indices
-
-def load_cluster_model(model_path):
-    cluster_model = load(model_path)
-    return cluster_model
 
 
 ### Task-3-CNN
 def load_styles(filename):
-    style_data = np.load(filename, allow_pickle=True)
+    style_data = np.load(filename, allow_pickle=True)  # Load style data using numpy
     return style_data.tolist()[0]
+
+def load_cluster_model(model_path):
+    cluster_model = load(model_path)  # Load a clustering model
+    return cluster_model
+
+def classify_and_recommend(image_array, class_model, style_model, threshold=0.2):
+    classes = load_classes('../data/label_encoders/class_encoder.npy')  # Load class labels
+    styles = load_styles('../data/label_encoders/style_encoder.npy')  # Load style labels
+    
+    class_pred = class_model.predict(image_array)  # Predict class
+    style_pred = style_model.predict(image_array)  # Predict style
+
+    predicted_class_idx = np.argmax(class_pred, axis=1)[0]  # Index of predicted class
+    predicted_class = classes[predicted_class_idx]  # Name of predicted class
+
+    predicted_style_indices = np.where(style_pred > threshold)[1]  # Indices of styles exceeding threshold
+    predicted_styles = [styles[idx] for idx in predicted_style_indices] if predicted_style_indices.size > 0 else [styles[np.argmax(style_pred)]]  # List of predicted styles
+
+    # Filter recommendations
+    filtered_recommendations = recommendations_df[
+        (recommendations_df['Class'] == predicted_class) & 
+        (recommendations_df['Style'].isin(predicted_styles))
+    ]
+
+    image_feature_vector = feature_extraction_model.predict(image_array).reshape(1, -1)  # Extract image feature vector
+    filtered_features = filtered_recommendations.filter(regex='^x[0-9]+').values  # Extract feature data from recommendations
+
+    cosine_similarities = cosine_similarity(image_feature_vector, filtered_features)  # Compute cosine similarities
+    top_indices = np.argsort(-cosine_similarities.flatten())[:10]  # Top 10 recommendations
+
+    top_recommendations = filtered_recommendations.iloc[top_indices]
+    return predicted_class, predicted_styles, top_recommendations
