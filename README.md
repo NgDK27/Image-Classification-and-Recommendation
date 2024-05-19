@@ -14,8 +14,7 @@ There's just some steps to take:
 1. Install PDM
 2. Install dependencies and create environment
 3. Select the created environment as your interpreter
-4. Install Graphviz
-5. Copy in raw dataset
+4. Copy in raw dataset
 
 
 ### Step 1. Install PDM
@@ -49,25 +48,6 @@ pdm install -G windows
 ### Step 3. Select the created environment as your Python interpreter
 
 In your chosen IDE, select the `python.exe` within the newly created `.venv/Script/` folder as your Python interpreter.
-
-### Step 4. Install Graphviz
-
-**For Mac**
-
-```commandline
-sudo port install graphviz
-```
-or 
-```commandline
-brew install graphviz
-```
-
-**For Windows**
-
-Download and install the latest Graphviz installer from: https://graphviz.gitlab.io/download/
-For your convenience, here's the EXE installer for Graphviz 11.0: https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/11.0.0/windows_10_cmake_Release_graphviz-install-11.0.0-win64.exe
-
-**NOTE:** Add Graphviz to your system's PATH for it to work.
 
 ### Step 4. Copy in raw dataset
 
