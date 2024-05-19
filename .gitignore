@@ -105,13 +105,13 @@ ipython_config.py
 #   git rm -r .ipynb_checkpoints/
 
 # Dataset
-data/raw
+data/
 scraping/*/
 scraping/*.zip
 
 # Machine Learning
 log/
-# models/
+models/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
