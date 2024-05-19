@@ -1,10 +1,16 @@
 # Image-Classification-and-Recommendation
 
 #### Group SG_T3_G5
+
 - S3800978	• Do Hoang Quan
 - S3864235	• Lee Seungmin
 - S3978724	• Nguyen Ich Kiet
 - S3925921	• Nguyen Dinh Khai
+
+#### Note
+
+- There are no folders for processed images, as images are processed on the fly during training process.
+- There are no scripts for models, only notebooks and the **front-end** (which is different from the requirements). As such, please follow the "Running" section below on running the notebooks and start the front-end to start testing the models.
 
 --- 
 ## Setup
@@ -14,8 +20,7 @@ There's just some steps to take:
 1. Install PDM
 2. Install dependencies and create environment
 3. Select the created environment as your interpreter
-4. Install Graphviz
-5. Copy in raw dataset
+4. Copy in raw dataset
 
 
 ### Step 1. Install PDM
@@ -50,25 +55,6 @@ pdm install -G windows
 
 In your chosen IDE, select the `python.exe` within the newly created `.venv/Script/` folder as your Python interpreter.
 
-### Step 4. Install Graphviz
-
-**For Mac**
-
-```commandline
-sudo port install graphviz
-```
-or 
-```commandline
-brew install graphviz
-```
-
-**For Windows**
-
-Download and install the latest Graphviz installer from: https://graphviz.gitlab.io/download/
-For your convenience, here's the EXE installer for Graphviz 11.0: https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/11.0.0/windows_10_cmake_Release_graphviz-install-11.0.0-win64.exe
-
-**NOTE:** Add Graphviz to your system's PATH for it to work.
-
 ### Step 4. Copy in raw dataset
 
 Copy in the entire raw dataset folder `Furniture_Data` into `/data/raw/`. The final structure should look like this:
@@ -89,7 +75,7 @@ Copy in the entire raw dataset folder `Furniture_Data` into `/data/raw/`. The fi
 ## Running
 
 1. Ensure all steps in `Setup` is completed.
-2. Run notebooks in `/notebooks` in the numerical order. This is important as previous notebooks output files and models for later notebooks.
+2. Run notebooks in `/notebooks` in the numerical order, OR, run notebook `0. Main. ipynb`, which will run all the notebooks for you. This is important as previous notebooks output files and models for later notebooks.
 3. Once all the notebooks is completed, OR, at least `4. Recommend - Class` (read the `Notes` below for why), you can now run the front-end:
 ```commandline
 cd streamlit
@@ -105,6 +91,7 @@ pdm run streamlit run app.py
 
 ```
 ├── notebooks/
+│   ├── 0. Main.ipynb
 │   ├── 1. EDA.ipynb
 │   ├── 2. Preprocessing.ipynb
 │   ├── 3. Task 1 - ANN.ipynb
@@ -139,7 +126,11 @@ pdm run streamlit run app.py
 ```
 
 1. `notebooks/`: all Jupyter Notebooks for this project.
-2. `data/`: contains original dataset. As you run the notebooks, more data will be added into this folder, such as `models/`.
+2. `data/`: contains original dataset. As you run the notebooks, more data will be added into this folder, such as:
+-  `models/`: all the model in the project
+-  `processed/`: all dataframe used (train, test, split, duplicates)
+-  `recommend/`: recommendation dataframe and its feature vectors dataset
+-  `raw/`: original dataset
 3. `streamlit/`: contains code for running the Streamlit front-end.
 4. `utils/`: contains various utility code to support the Jupyter notebooks.
 5. `.gitignore`: contains ignore VCS ignore rules.
