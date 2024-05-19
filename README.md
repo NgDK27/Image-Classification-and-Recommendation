@@ -1,10 +1,16 @@
 # Image-Classification-and-Recommendation
 
 #### Group SG_T3_G5
+
 - S3800978	• Do Hoang Quan
 - S3864235	• Lee Seungmin
 - S3978724	• Nguyen Ich Kiet
 - S3925921	• Nguyen Dinh Khai
+
+#### Note
+
+- There are no folders for processed images, as images are processed on the fly during training process.
+- There are no scripts for models, only notebooks and the **front-end** (which is different from the requirements). As such, please follow the "Running" section below on running the notebooks and start the front-end to start testing the models.
 
 --- 
 ## Setup
