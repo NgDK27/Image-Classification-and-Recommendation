@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "macos"]
+groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:027dfa6e0634a5cd4676373424537d2f3d909b91a942e5bd955506fc3f56a14a"
+content_hash = "sha256:1e5fad24b46f8dcf8691397fdeb21a831d6289f156b6c850095a971deb65b385"
 
 [[package]]
 name = "absl-py"
@@ -16,25 +16,6 @@ groups = ["default"]
 files = [
     {file = "absl-py-2.1.0.tar.gz", hash = "sha256:7820790efbb316739cde8b4e19357243fc3608a152024288513dd968d7d959ff"},
     {file = "absl_py-2.1.0-py3-none-any.whl", hash = "sha256:526a04eadab8b4ee719ce68f204172ead1027549089702d99b9059f129ff1308"},
-]
-
-[[package]]
-name = "altair"
-version = "5.3.0"
-requires_python = ">=3.8"
-summary = "Vega-Altair: A declarative statistical visualization library for Python."
-groups = ["default"]
-dependencies = [
-    "jinja2",
-    "jsonschema>=3.0",
-    "numpy",
-    "packaging",
-    "pandas>=0.25",
-    "toolz",
-]
-files = [
-    {file = "altair-5.3.0-py3-none-any.whl", hash = "sha256:7084a1dab4d83c5e7e5246b92dc1b4451a6c68fd057f3716ee9d315c8980e59a"},
-    {file = "altair-5.3.0.tar.gz", hash = "sha256:5a268b1a0983b23d8f9129f819f956174aa7aea2719ed55a52eba9979b9f6675"},
 ]
 
 [[package]]
@@ -222,17 +203,6 @@ dependencies = [
 files = [
     {file = "bleach-6.1.0-py3-none-any.whl", hash = "sha256:3225f354cfc436b9789c66c4ee030194bee0568fbf9cbdad3bc8b5c26c5f12b6"},
     {file = "bleach-6.1.0.tar.gz", hash = "sha256:0a31f1837963c41d46bbf1331b8778e1308ea0791db03cc4e7357b97cf42a8fe"},
-]
-
-[[package]]
-name = "blinker"
-version = "1.8.2"
-requires_python = ">=3.8"
-summary = "Fast, simple object-to-object and broadcast signaling"
-groups = ["default"]
-files = [
-    {file = "blinker-1.8.2-py3-none-any.whl", hash = "sha256:1779309f71bf239144b9399d06ae925637cf6634cf6bd131104184531bf67c01"},
-    {file = "blinker-1.8.2.tar.gz", hash = "sha256:8f77b09d3bf7c795e969e9486f39c2c5e9c39d4ee07424be2bc594ece9642d83"},
 ]
 
 [[package]]
@@ -584,34 +554,6 @@ groups = ["default"]
 files = [
     {file = "gast-0.5.4-py3-none-any.whl", hash = "sha256:6fc4fa5fa10b72fb8aab4ae58bcb023058386e67b6fa2e3e34cec5c769360316"},
     {file = "gast-0.5.4.tar.gz", hash = "sha256:9c270fe5f4b130969b54174de7db4e764b09b4f7f67ccfc32480e29f78348d97"},
-]
-
-[[package]]
-name = "gitdb"
-version = "4.0.11"
-requires_python = ">=3.7"
-summary = "Git Object Database"
-groups = ["default"]
-dependencies = [
-    "smmap<6,>=3.0.1",
-]
-files = [
-    {file = "gitdb-4.0.11-py3-none-any.whl", hash = "sha256:81a3407ddd2ee8df444cbacea00e2d038e40150acfa3001696fe0dcf1d3adfa4"},
-    {file = "gitdb-4.0.11.tar.gz", hash = "sha256:bf5421126136d6d0af55bc1e7c1af1c397a34f5b7bd79e776cd3e89785c2b04b"},
-]
-
-[[package]]
-name = "gitpython"
-version = "3.1.43"
-requires_python = ">=3.7"
-summary = "GitPython is a Python library used to interact with Git repositories"
-groups = ["default"]
-dependencies = [
-    "gitdb<5,>=4.0.1",
-]
-files = [
-    {file = "GitPython-3.1.43-py3-none-any.whl", hash = "sha256:eec7ec56b92aad751f9912a73404bc02ba212a23adb2c7098ee668417051a1ff"},
-    {file = "GitPython-3.1.43.tar.gz", hash = "sha256:35f314a9f878467f5453cc1fee295c3e18e52f1b99f10f6cf5b1682e968a9e7c"},
 ]
 
 [[package]]
@@ -1112,34 +1054,34 @@ files = [
 
 [[package]]
 name = "jupyter-server"
-version = "2.13.0"
+version = "2.14.0"
 requires_python = ">=3.8"
 summary = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications."
 groups = ["default"]
 dependencies = [
     "anyio>=3.1.0",
-    "argon2-cffi",
-    "jinja2",
+    "argon2-cffi>=21.1",
+    "jinja2>=3.0.3",
     "jupyter-client>=7.4.4",
     "jupyter-core!=5.0.*,>=4.12",
     "jupyter-events>=0.9.0",
-    "jupyter-server-terminals",
+    "jupyter-server-terminals>=0.4.4",
     "nbconvert>=6.4.4",
     "nbformat>=5.3.0",
-    "overrides",
-    "packaging",
-    "prometheus-client",
-    "pywinpty; os_name == \"nt\"",
+    "overrides>=5.0",
+    "packaging>=22.0",
+    "prometheus-client>=0.9",
+    "pywinpty>=2.0.1; os_name == \"nt\"",
     "pyzmq>=24",
     "send2trash>=1.8.2",
     "terminado>=0.8.3",
     "tornado>=6.2.0",
     "traitlets>=5.6.0",
-    "websocket-client",
+    "websocket-client>=1.7",
 ]
 files = [
-    {file = "jupyter_server-2.13.0-py3-none-any.whl", hash = "sha256:77b2b49c3831fbbfbdb5048cef4350d12946191f833a24e5f83e5f8f4803e97b"},
-    {file = "jupyter_server-2.13.0.tar.gz", hash = "sha256:c80bfb049ea20053c3d9641c2add4848b38073bf79f1729cea1faed32fc1c78e"},
+    {file = "jupyter_server-2.14.0-py3-none-any.whl", hash = "sha256:fb6be52c713e80e004fac34b35a0990d6d36ba06fd0a2b2ed82b899143a64210"},
+    {file = "jupyter_server-2.14.0.tar.gz", hash = "sha256:659154cea512083434fd7c93b7fe0897af7a2fd0b9dd4749282b42eaac4ae677"},
 ]
 
 [[package]]
@@ -1355,20 +1297,6 @@ files = [
 ]
 
 [[package]]
-name = "markdown-it-py"
-version = "3.0.0"
-requires_python = ">=3.8"
-summary = "Python port of markdown-it. Markdown parsing, done right!"
-groups = ["default"]
-dependencies = [
-    "mdurl~=0.1",
-]
-files = [
-    {file = "markdown-it-py-3.0.0.tar.gz", hash = "sha256:e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb"},
-    {file = "markdown_it_py-3.0.0-py3-none-any.whl", hash = "sha256:355216845c60bd96232cd8d8c40e8f9765cc86f46880e43a8fd22dc1a1a8cab1"},
-]
-
-[[package]]
 name = "markupsafe"
 version = "2.1.5"
 requires_python = ">=3.7"
@@ -1430,17 +1358,6 @@ dependencies = [
 files = [
     {file = "matplotlib_inline-0.1.7-py3-none-any.whl", hash = "sha256:df192d39a4ff8f21b1895d72e6a13f5fcc5099f00fa84384e0ea28c2cc0653ca"},
     {file = "matplotlib_inline-0.1.7.tar.gz", hash = "sha256:8423b23ec666be3d16e16b60bdd8ac4e86e840ebd1dd11a30b9f117f2fa0ab90"},
-]
-
-[[package]]
-name = "mdurl"
-version = "0.1.2"
-requires_python = ">=3.7"
-summary = "Markdown URL utilities"
-groups = ["default"]
-files = [
-    {file = "mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"},
-    {file = "mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba"},
 ]
 
 [[package]]
@@ -1648,16 +1565,13 @@ files = [
 
 [[package]]
 name = "packaging"
-version = "21.3"
-requires_python = ">=3.6"
+version = "24.0"
+requires_python = ">=3.7"
 summary = "Core utilities for Python packages"
 groups = ["default"]
-dependencies = [
-    "pyparsing!=3.0.5,>=2.0.2",
-]
 files = [
-    {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
-    {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
+    {file = "packaging-24.0-py3-none-any.whl", hash = "sha256:2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5"},
+    {file = "packaging-24.0.tar.gz", hash = "sha256:eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9"},
 ]
 
 [[package]]
@@ -1870,7 +1784,7 @@ files = [
 
 [[package]]
 name = "pyarrow"
-version = "16.0.0"
+version = "16.1.0"
 requires_python = ">=3.8"
 summary = "Python library for Apache Arrow"
 groups = ["default"]
@@ -1878,14 +1792,14 @@ dependencies = [
     "numpy>=1.16.6",
 ]
 files = [
-    {file = "pyarrow-16.0.0-cp311-cp311-macosx_10_15_x86_64.whl", hash = "sha256:d22d0941e6c7bafddf5f4c0662e46f2075850f1c044bf1a03150dd9e189427ce"},
-    {file = "pyarrow-16.0.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:266ddb7e823f03733c15adc8b5078db2df6980f9aa93d6bb57ece615df4e0ba7"},
-    {file = "pyarrow-16.0.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5cc23090224b6594f5a92d26ad47465af47c1d9c079dd4a0061ae39551889efe"},
-    {file = "pyarrow-16.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:56850a0afe9ef37249d5387355449c0f94d12ff7994af88f16803a26d38f2016"},
-    {file = "pyarrow-16.0.0-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:705db70d3e2293c2f6f8e84874b5b775f690465798f66e94bb2c07bab0a6bb55"},
-    {file = "pyarrow-16.0.0-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:5448564754c154997bc09e95a44b81b9e31ae918a86c0fcb35c4aa4922756f55"},
-    {file = "pyarrow-16.0.0-cp311-cp311-win_amd64.whl", hash = "sha256:729f7b262aa620c9df8b9967db96c1575e4cfc8c25d078a06968e527b8d6ec05"},
-    {file = "pyarrow-16.0.0.tar.gz", hash = "sha256:59bb1f1edbbf4114c72415f039f1359f1a57d166a331c3229788ccbfbb31689a"},
+    {file = "pyarrow-16.1.0-cp311-cp311-macosx_10_15_x86_64.whl", hash = "sha256:d0ebea336b535b37eee9eee31761813086d33ed06de9ab6fc6aaa0bace7b250c"},
+    {file = "pyarrow-16.1.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:2e73cfc4a99e796727919c5541c65bb88b973377501e39b9842ea71401ca6c1c"},
+    {file = "pyarrow-16.1.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bf9251264247ecfe93e5f5a0cd43b8ae834f1e61d1abca22da55b20c788417f6"},
+    {file = "pyarrow-16.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ddf5aace92d520d3d2a20031d8b0ec27b4395cab9f74e07cc95edf42a5cc0147"},
+    {file = "pyarrow-16.1.0-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:25233642583bf658f629eb230b9bb79d9af4d9f9229890b3c878699c82f7d11e"},
+    {file = "pyarrow-16.1.0-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:a33a64576fddfbec0a44112eaf844c20853647ca833e9a647bfae0582b2ff94b"},
+    {file = "pyarrow-16.1.0-cp311-cp311-win_amd64.whl", hash = "sha256:185d121b50836379fe012753cf15c4ba9638bda9645183ab36246923875f8d1b"},
+    {file = "pyarrow-16.1.0.tar.gz", hash = "sha256:15fbb22ea96d11f0b5768504a3f961edab25eaf4197c341720c4a387f6c60315"},
 ]
 
 [[package]]
@@ -1922,21 +1836,6 @@ groups = ["default"]
 files = [
     {file = "pycparser-2.22-py3-none-any.whl", hash = "sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc"},
     {file = "pycparser-2.22.tar.gz", hash = "sha256:491c8be9c040f5390f5bf44a5b07752bd07f56edf992381b05c701439eec10f6"},
-]
-
-[[package]]
-name = "pydeck"
-version = "0.9.1"
-requires_python = ">=3.8"
-summary = "Widget for deck.gl maps"
-groups = ["default"]
-dependencies = [
-    "jinja2>=2.10.1",
-    "numpy>=1.16.4",
-]
-files = [
-    {file = "pydeck-0.9.1-py2.py3-none-any.whl", hash = "sha256:b3f75ba0d273fc917094fa61224f3f6076ca8752b93d46faf3bcfd9f9d59b038"},
-    {file = "pydeck-0.9.1.tar.gz", hash = "sha256:f74475ae637951d63f2ee58326757f8d4f9cd9f2a457cf42950715003e2cb605"},
 ]
 
 [[package]]
@@ -2227,21 +2126,6 @@ files = [
 ]
 
 [[package]]
-name = "rich"
-version = "13.7.1"
-requires_python = ">=3.7.0"
-summary = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
-groups = ["default"]
-dependencies = [
-    "markdown-it-py>=2.2.0",
-    "pygments<3.0.0,>=2.13.0",
-]
-files = [
-    {file = "rich-13.7.1-py3-none-any.whl", hash = "sha256:4edbae314f59eb482f54e9e30bf00d33350aaa94f4bfcd4e9e3110e64d0d7222"},
-    {file = "rich-13.7.1.tar.gz", hash = "sha256:9be308cb1fe2f1f57d67ce99e95af38a1e2bc71ad9813b0e247cf7ffbcc3a432"},
-]
-
-[[package]]
 name = "rpds-py"
 version = "0.18.1"
 requires_python = ">=3.8"
@@ -2313,17 +2197,19 @@ files = [
 
 [[package]]
 name = "scikeras"
-version = "0.4.1"
-requires_python = ">=3.6.1,<4.0"
+version = "0.12.0"
+requires_python = ">=3.8.0,<3.12.0"
 summary = "Scikit-Learn API wrapper for Keras."
 groups = ["default"]
 dependencies = [
-    "packaging<22.0,>=0.21",
-    "scikit-learn>=0.22.0",
+    "packaging>=0.21",
+    "scikit-learn>=1.0.0",
+    "tensorflow-io-gcs-filesystem<0.32,>=0.23.1; sys_platform == \"win32\"",
+    "tensorflow-metal<2.0.0,>=1.1.0; sys_platform == \"darwin\" and platform_machine == \"arm64\"",
 ]
 files = [
-    {file = "scikeras-0.4.1-py3-none-any.whl", hash = "sha256:e61755f29df5b23aa30b3e6ddc8889607a6dcd936cb441de6207d185b0429ab4"},
-    {file = "scikeras-0.4.1.tar.gz", hash = "sha256:851f00d2477ea166eebe5ef093c82cd29ef67b7efd90fa12a2889adcfafccaf5"},
+    {file = "scikeras-0.12.0-py3-none-any.whl", hash = "sha256:2d69a4a70118f8a0ffb1b2487b25f7c668f36ab83425fdf9a3271eb02da739ab"},
+    {file = "scikeras-0.12.0.tar.gz", hash = "sha256:f60d81255a8904671bd33cbff060926cfa5ddd52fa234b12290afe3cb69dcc6c"},
 ]
 
 [[package]]
@@ -2434,21 +2320,10 @@ name = "six"
 version = "1.16.0"
 requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 summary = "Python 2 and 3 compatibility utilities"
-groups = ["default", "macos"]
+groups = ["default"]
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
-]
-
-[[package]]
-name = "smmap"
-version = "5.0.1"
-requires_python = ">=3.7"
-summary = "A pure Python implementation of a sliding window memory map manager"
-groups = ["default"]
-files = [
-    {file = "smmap-5.0.1-py3-none-any.whl", hash = "sha256:e6d8668fa5f93e706934a62d7b4db19c8d9eb8cf2adbb75ef1b675aa332b69da"},
-    {file = "smmap-5.0.1.tar.gz", hash = "sha256:dceeb6c0028fdb6734471eb07c0cd2aae706ccaecab45965ee83f11c8d3b1f62"},
 ]
 
 [[package]]
@@ -2489,38 +2364,6 @@ files = [
 ]
 
 [[package]]
-name = "streamlit"
-version = "1.34.0"
-requires_python = "!=3.9.7,>=3.8"
-summary = "A faster way to build and share data apps"
-groups = ["default"]
-dependencies = [
-    "altair<6,>=4.0",
-    "blinker<2,>=1.0.0",
-    "cachetools<6,>=4.0",
-    "click<9,>=7.0",
-    "gitpython!=3.1.19,<4,>=3.0.7",
-    "numpy<2,>=1.19.3",
-    "packaging<25,>=16.8",
-    "pandas<3,>=1.3.0",
-    "pillow<11,>=7.1.0",
-    "protobuf<5,>=3.20",
-    "pyarrow>=7.0",
-    "pydeck<1,>=0.8.0b4",
-    "requests<3,>=2.27",
-    "rich<14,>=10.14.0",
-    "tenacity<9,>=8.1.0",
-    "toml<2,>=0.10.1",
-    "tornado<7,>=6.0.3",
-    "typing-extensions<5,>=4.3.0",
-    "watchdog>=2.1.5; platform_system != \"Darwin\"",
-]
-files = [
-    {file = "streamlit-1.34.0-py2.py3-none-any.whl", hash = "sha256:411183cf7f525e468eb256b343c914782d11cd894b5e30a4ab3bb1d54e3ae339"},
-    {file = "streamlit-1.34.0.tar.gz", hash = "sha256:135a3b79a686b3132b73f204450ad6e889de04f3349d692925e09f0e21e74b52"},
-]
-
-[[package]]
 name = "swifter"
 version = "1.4.0"
 summary = "A package which efficiently applies any function to a pandas dataframe or series in the fastest available manner"
@@ -2533,17 +2376,6 @@ dependencies = [
 ]
 files = [
     {file = "swifter-1.4.0.tar.gz", hash = "sha256:e1bb74476a21b3f07a17aa18c97fdcba8599726bd17da732f09dabcc50e26ba0"},
-]
-
-[[package]]
-name = "tenacity"
-version = "8.3.0"
-requires_python = ">=3.8"
-summary = "Retry code until it succeeds"
-groups = ["default"]
-files = [
-    {file = "tenacity-8.3.0-py3-none-any.whl", hash = "sha256:3649f6443dbc0d9b01b9d8020a9c4ec7a1ff5f6f3c6c8a036ef371f573fe9185"},
-    {file = "tenacity-8.3.0.tar.gz", hash = "sha256:953d4e6ad24357bceffbc9707bc74349aca9d245f68eb65419cf0c249a1949a2"},
 ]
 
 [[package]]
@@ -2583,7 +2415,17 @@ files = [
 ]
 
 [[package]]
-name = "tensorflow"
+name = "tensorflow-estimator"
+version = "2.15.0"
+requires_python = ">=3.7"
+summary = "TensorFlow Estimator."
+groups = ["default"]
+files = [
+    {file = "tensorflow_estimator-2.15.0-py2.py3-none-any.whl", hash = "sha256:aedf21eec7fb2dc91150fc91a1ce12bc44dbb72278a08b58e79ff87c9e28f153"},
+]
+
+[[package]]
+name = "tensorflow-intel"
 version = "2.15.1"
 requires_python = ">=3.9"
 summary = "TensorFlow is an open source machine learning framework for everyone."
@@ -2613,41 +2455,28 @@ dependencies = [
     "wrapt<1.15,>=1.11.0",
 ]
 files = [
-    {file = "tensorflow-2.15.1-cp311-cp311-macosx_10_15_x86_64.whl", hash = "sha256:6761efe511e6ee0f893f60738fefbcc51d6dc386eeaaafea59d21899ef369ffd"},
-    {file = "tensorflow-2.15.1-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:aa926114d1e13ffe5b2ea59c3f195216f26646d7fe36e9e5207b291e4b7902ff"},
-    {file = "tensorflow-2.15.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e73d43dbc68d8c711e70edecc4ac70472799a25ec4ec18a84d479ee18033d3c5"},
-    {file = "tensorflow-2.15.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bb0edd69103c154245c5f209f0507355cc68ba7e4de350084bc31edc562478e4"},
-    {file = "tensorflow-2.15.1-cp311-cp311-win_amd64.whl", hash = "sha256:a49f8755c74a89553294a99ab25aa87ab1cddbfa40fe58387e09f64f0578cedc"},
-]
-
-[[package]]
-name = "tensorflow-estimator"
-version = "2.15.0"
-requires_python = ">=3.7"
-summary = "TensorFlow Estimator."
-groups = ["default"]
-files = [
-    {file = "tensorflow_estimator-2.15.0-py2.py3-none-any.whl", hash = "sha256:aedf21eec7fb2dc91150fc91a1ce12bc44dbb72278a08b58e79ff87c9e28f153"},
+    {file = "tensorflow_intel-2.15.1-cp311-cp311-win_amd64.whl", hash = "sha256:4f05059493f8203285ac5cea3b1955887a7903c1ca6f7a29e4b6ef912b1f934b"},
 ]
 
 [[package]]
 name = "tensorflow-io-gcs-filesystem"
-version = "0.37.0"
-requires_python = "<3.12,>=3.7"
+version = "0.31.0"
+requires_python = ">=3.7, <3.12"
 summary = "TensorFlow IO"
-groups = ["default", "macos"]
+groups = ["default"]
 files = [
-    {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-macosx_10_14_x86_64.whl", hash = "sha256:eab6e4c1daf7ddbfef608cd8e2102861021678dfb3f6a7fb3f613db9d6992919"},
-    {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-macosx_12_0_arm64.whl", hash = "sha256:4ec3c0d0a9d3676a2e74198e3dff66d74c7c34f974257f2176236d0703b31a0e"},
-    {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:af0f79400656bb88bf326d2b8e63aef49c07a0ce8c14c3e2589a62e765d8c21f"},
-    {file = "tensorflow_io_gcs_filesystem-0.37.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:13bc337f2c2db63a39c81c8fd0ececc0c3d5fcf4ce229dfed0b0085a23dd60e9"},
+    {file = "tensorflow_io_gcs_filesystem-0.31.0-cp311-cp311-macosx_10_14_x86_64.whl", hash = "sha256:8909c4344b0e96aa356230ab460ffafe5900c33c1aaced65fafae71d177a1966"},
+    {file = "tensorflow_io_gcs_filesystem-0.31.0-cp311-cp311-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:e417faf8755aafe52d8f8c6b5ae5bae6e4fae8326ee3acd5e9181b83bbfbae87"},
+    {file = "tensorflow_io_gcs_filesystem-0.31.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:37c40e3c4ee1f8dda3b545deea6b8839192c82037d8021db9f589908034ad975"},
+    {file = "tensorflow_io_gcs_filesystem-0.31.0-cp311-cp311-win_amd64.whl", hash = "sha256:4bb37d23f21c434687b11059cb7ffd094d52a7813368915ba1b7057e3c16e414"},
 ]
 
 [[package]]
 name = "tensorflow-metal"
 version = "1.1.0"
 summary = "TensorFlow acceleration for Mac GPUs."
-groups = ["default", "macos"]
+groups = ["default"]
+marker = "sys_platform == \"darwin\" and platform_machine == \"arm64\""
 dependencies = [
     "six>=1.15.0",
     "wheel~=0.35",
@@ -2720,17 +2549,6 @@ dependencies = [
 files = [
     {file = "tinycss2-1.3.0-py3-none-any.whl", hash = "sha256:54a8dbdffb334d536851be0226030e9505965bb2f30f21a4a82c55fb2a80fae7"},
     {file = "tinycss2-1.3.0.tar.gz", hash = "sha256:152f9acabd296a8375fbca5b84c961ff95971fcfc32e79550c8df8e29118c54d"},
-]
-
-[[package]]
-name = "toml"
-version = "0.10.2"
-requires_python = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
-summary = "Python Library for Tom's Obvious, Minimal Language"
-groups = ["default"]
-files = [
-    {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
-    {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
 ]
 
 [[package]]
@@ -2845,33 +2663,6 @@ files = [
 ]
 
 [[package]]
-name = "watchdog"
-version = "4.0.0"
-requires_python = ">=3.8"
-summary = "Filesystem events monitoring"
-groups = ["default"]
-marker = "platform_system != \"Darwin\""
-files = [
-    {file = "watchdog-4.0.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:8350d4055505412a426b6ad8c521bc7d367d1637a762c70fdd93a3a0d595990b"},
-    {file = "watchdog-4.0.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:c17d98799f32e3f55f181f19dd2021d762eb38fdd381b4a748b9f5a36738e935"},
-    {file = "watchdog-4.0.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:4986db5e8880b0e6b7cd52ba36255d4793bf5cdc95bd6264806c233173b1ec0b"},
-    {file = "watchdog-4.0.0-pp310-pypy310_pp73-macosx_10_9_x86_64.whl", hash = "sha256:6e949a8a94186bced05b6508faa61b7adacc911115664ccb1923b9ad1f1ccf7b"},
-    {file = "watchdog-4.0.0-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:6a4db54edea37d1058b08947c789a2354ee02972ed5d1e0dca9b0b820f4c7f92"},
-    {file = "watchdog-4.0.0-pp39-pypy39_pp73-macosx_10_9_x86_64.whl", hash = "sha256:d31481ccf4694a8416b681544c23bd271f5a123162ab603c7d7d2dd7dd901a07"},
-    {file = "watchdog-4.0.0-py3-none-manylinux2014_aarch64.whl", hash = "sha256:8fec441f5adcf81dd240a5fe78e3d83767999771630b5ddfc5867827a34fa3d3"},
-    {file = "watchdog-4.0.0-py3-none-manylinux2014_armv7l.whl", hash = "sha256:6a9c71a0b02985b4b0b6d14b875a6c86ddea2fdbebd0c9a720a806a8bbffc69f"},
-    {file = "watchdog-4.0.0-py3-none-manylinux2014_i686.whl", hash = "sha256:557ba04c816d23ce98a06e70af6abaa0485f6d94994ec78a42b05d1c03dcbd50"},
-    {file = "watchdog-4.0.0-py3-none-manylinux2014_ppc64.whl", hash = "sha256:d0f9bd1fd919134d459d8abf954f63886745f4660ef66480b9d753a7c9d40927"},
-    {file = "watchdog-4.0.0-py3-none-manylinux2014_ppc64le.whl", hash = "sha256:f9b2fdca47dc855516b2d66eef3c39f2672cbf7e7a42e7e67ad2cbfcd6ba107d"},
-    {file = "watchdog-4.0.0-py3-none-manylinux2014_s390x.whl", hash = "sha256:73c7a935e62033bd5e8f0da33a4dcb763da2361921a69a5a95aaf6c93aa03a87"},
-    {file = "watchdog-4.0.0-py3-none-manylinux2014_x86_64.whl", hash = "sha256:6a80d5cae8c265842c7419c560b9961561556c4361b297b4c431903f8c33b269"},
-    {file = "watchdog-4.0.0-py3-none-win32.whl", hash = "sha256:8f9a542c979df62098ae9c58b19e03ad3df1c9d8c6895d96c0d51da17b243b1c"},
-    {file = "watchdog-4.0.0-py3-none-win_amd64.whl", hash = "sha256:f970663fa4f7e80401a7b0cbeec00fa801bf0287d93d48368fc3e6fa32716245"},
-    {file = "watchdog-4.0.0-py3-none-win_ia64.whl", hash = "sha256:9a03e16e55465177d416699331b0f3564138f1807ecc5f2de9d55d8f188d08c7"},
-    {file = "watchdog-4.0.0.tar.gz", hash = "sha256:e3e7065cbdabe6183ab82199d7a4f6b3ba0a438c5a512a68559846ccb76a78ec"},
-]
-
-[[package]]
 name = "wcwidth"
 version = "0.2.13"
 summary = "Measures the displayed width of unicode strings in a terminal"
@@ -2932,7 +2723,7 @@ name = "wheel"
 version = "0.43.0"
 requires_python = ">=3.8"
 summary = "A built-package format for Python"
-groups = ["default", "macos"]
+groups = ["default"]
 files = [
     {file = "wheel-0.43.0-py3-none-any.whl", hash = "sha256:55c570405f142630c6b9f72fe09d9b67cf1477fcf543ae5b8dcb1f5b7377da81"},
     {file = "wheel-0.43.0.tar.gz", hash = "sha256:465ef92c69fa5c5da2d1cf8ac40559a8c940886afcef87dcf14b9470862f1d85"},

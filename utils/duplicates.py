@@ -15,7 +15,7 @@ file = font_manager.findfont(font)
 # Setting default variables
 BASE_PATH = "../data/raw/Furniture_Data"
 HASH_SIZE = 16  # Larger hash size means better differentiation between visually similar images
-DIFFERENCE_THRESHOLD = 1  # Difference in bits between hashes of images.
+DIFFERENCE_THRESHOLD = 2  # Difference in bits between hashes of images.
 # Larger DIFFERENCE_THRESHOLD means more visually similar images are counted as duplicates.
 CLOSEST_DUPLICATES_THRESHOLD = 10  # How many closest items to find during get_nns_by_item().
 # Smaller CLOSEST_DUPLICATES_THRESHOLD means less duplicates to find, lessening the run time.
