@@ -8,7 +8,6 @@ import os
 from joblib import load
 from sklearn.metrics.pairwise import cosine_similarity
 from tensorflow.keras.models import load_model
-from sklearn.metrics.pairwise import cosine_similarity
 
 
 # Configure logging to help in debugging and log management
@@ -132,5 +131,5 @@ def classify_and_recommend(image_array, class_model, style_model, threshold=0.3,
     cosine_similarities = cosine_similarity(image_feature_vector, filtered_features)  # Compute cosine similarities
     top_indices = np.argsort(-cosine_similarities.flatten())[:10]  # Top 10 recommendations
     top_recommendations = filtered_recommendations.iloc[top_indices]
-    
+
     return predicted_class, predicted_styles, all_predictions, top_recommendations

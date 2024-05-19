@@ -6,8 +6,8 @@ from utils import (load_model, prepare_image, predict, load_classes, load_styles
                    preprocess_and_predict, find_similar_items, recommendations_df, 
                    classify_and_recommend, load_cluster_model)
 
-
-st.title("Machine Learning (COSC2753): Group Assignment")
+st.title("COSC2753: Group Project")
+st.header("T3_Group 5")
 
 # Load the models and label encoders
 model1 = load_model('../data/models/task-1-CNN.keras')
@@ -16,17 +16,9 @@ model3 = load_model('../data/models/task-3-CNN.keras')
 styles = load_styles('../data/label_encoders/style_encoder.npy')
 cluster_model = load_cluster_model('../data/models/cluster-kmeans.model')
 
-# HTML for the mobile
-html_string = '''
-<form action="/upload" method="post" enctype="multipart/form-data">
-  <input type="file" accept="image/*" capture="environment">
-  <input type="submit">
-</form>
-'''
 
 # Interface for uploading an image
 st.markdown("### Upload the furniture image: ")
-# components.html(html_string, height=150)
 uploaded_file = st.file_uploader("Please upload an image file: ", type=["png", "jpg", "webp"], key="1")  # Create an image file uploader
 
 
@@ -40,11 +32,6 @@ if uploaded_file is not None:  # Check if a file has been uploaded
         predictions1, predicted1_index = predict(model1, image_array)  # Predict the class of the furniture using the task1 model
         if predictions1 is not None:
             st.markdown('##### ① Same Furniture Class Prediction:')
-            # 1
-            # for label, pred in zip(classes, predictions1[0]):  # Loop through class labels and predictions
-            #     st.write(f"- {label}: {pred:.8f}")  # Display each class label and its prediction probability
-            # 2
-            # labels = classes  # class label
             sizes = predictions1[0]  # prediction for each class
             # Plotly graph
             fig = go.Figure(data=[go.Pie(labels=classes, values=sizes, textinfo='label+percent', hole=.3)])
@@ -86,7 +73,6 @@ if uploaded_file is not None:
     if image_array is not None:
         predicted_class, predicted_styles, all_predictions, recommendations = classify_and_recommend(image_array, model1, model3)
         if all_predictions is not None:
-
             st.markdown('##### ① Same Interior Style Predictions:')
             for style, probability in all_predictions:
                 st.write(f"- {style}: {probability:.8f}")  # Display each style and its probability
@@ -108,7 +94,7 @@ if uploaded_file is not None:
             # Style the graph
             fig.update_layout(
                 xaxis_title='Probability',
-                yaxis_title='Class/Style',
+                yaxis_title='Style',
                 yaxis={'categoryorder':'total ascending'},  # Sort by probability
                 xaxis=dict(range=[0, 1])  # Set x-axis range from 0 to 1
                 )
@@ -126,7 +112,7 @@ if uploaded_file is not None:
                 # Also, collect styles that are close to the highest probability within a 1% range
                 for style, probability in all_predictions:
                     if probability > 0.3:  # Check if the probability exceeds the threshold
-                        st.write(f"- {style}: {probability:.8f}")
+                        st.write(f"- {style} ({probability:.8f}%)")
                         exceeded_threshold = True
                     elif probability >= highest_probability - 0.01:  # Check if within 1% of the highest probability
                         close_styles.append((style, probability))
